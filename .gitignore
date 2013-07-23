@@ -1,3 +1,5 @@
 vendor/bundle
 vendor/bundle
 xmptmp-*
+.yardoc/
+doc/

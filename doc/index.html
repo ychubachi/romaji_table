@@ -65,7 +65,8 @@
 <h1 id="label-%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB">はじめに</h1>
 
 <p>このツールの目的は，最適化されたDvorakベースのローマ字かな変換表を作成
-するためのスクリプトをつくることです．</p>
+するためのスクリプトをつくることです．変換ルールを記述するためのDSLを
+提供し，いかなる配列にも対応できるようにすることを目指します．</p>
 
 <p>入力…変換ルール
 出力…ローマ字かな変換表(Google IME, IME, ATOKなど)</p>
@@ -76,7 +77,11 @@ aiu</p>
 
 <p>変換 &#39;aiueo&#39; , &#39;あいうえお&#39;</p>
 
-<p>キーボードの表を抽象化する</p>
+<h1 id="label-%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AE%E8%A1%A8%E3%82%92%E6%8A%BD%E8%B1%A1%E5%8C%96%E3%81%99%E3%82%8B">キーボードの表を抽象化する</h1>
+
+<h2 id="label-%E4%BD%8D%E7%BD%AE%E3%81%AE%E6%8C%87%E5%AE%9A%E6%96%B9%E6%B3%95">位置の指定方法</h2>
+
+<pre class="code ruby"><code class="ruby"><span class='lbrace'>{</span><span class='label'>左右:</span> <span class='symbol'>:左</span><span class='comma'>,</span> <span class='label'>段:</span> <span class='symbol'>:上</span><span class='comma'>,</span> <span class='label'>番号:</span> <span class='int'>0</span><span class='rbrace'>}</span></code></pre>
 
 <h1 id="label-%E4%BD%BF%E3%82%8F%E3%81%AA%E3%81%84%E5%AD%90%E9%9F%B3%E3%81%AE%E6%95%B4%E7%90%86">使わない子音の整理</h1>
 
@@ -94,8 +99,8 @@ X-&gt;小文字化-&gt;Lで十分
 <p>「ltu」で「っ」を出すようにする
 ん</p>
 
-<p>鍵盤 左右: :左,段: :上,
--&gt; &#39;bmwvz&#39; &#39;c&#39;,tw&#39;</p>
+<pre class="code ruby"><code class="ruby">鍵盤 左右: :左,段: :上,
+-&gt; &#39;bmwvz&#39; {上: &#39;c&#39;,tw&#39;}</code></pre>
 
 <h1 id="label-%E6%92%A5%E9%9F%B3">撥音</h1>
 
@@ -113,10 +118,14 @@ href="http://d.hatena.ne.jp/nullplus/20101121/1290348535">d.hatena.ne.jp/nullplu
 <p><a
 href="http://www1.vecceed.ne.jp/~bemu/act/act_doc_fr.html">www1.vecceed.ne.jp/~bemu/act/act_doc_fr.html</a></p>
 </dd></dl>
+
+<p><a
+href="https://sites.google.com/site/aourhairetu/Home">sites.google.com/site/aourhairetu/Home</a>
+ローマ字</p>
 </div></div>
 
     <div id="footer">
-  Generated on Tue Jul 23 14:40:46 2013 by
+  Generated on Tue Jul 23 18:19:20 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.6.2 (ruby-2.0.0).
 </div>

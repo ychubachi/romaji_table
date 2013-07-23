@@ -8,7 +8,7 @@ describe Generator, '#変換表作成' do
   end
 end
 
-describe Generator, '#変換' do
+describe Generator, '#変換'
   it '左上段を検査します' do 
     g = Generator.new
     g.変換('っ', 左右: :左, 段: :上, 番号: 0).should eq(["'", "っ"])
