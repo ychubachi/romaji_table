@@ -16,8 +16,6 @@ aiu
 # キーボードの表を抽象化する
 
 ## 位置の指定方法
-
-
 ```
 {左右: :左, 段: :上, 番号: 0}
 ```
@@ -46,7 +44,11 @@ X->小文字化->Lで十分
 # 撥音
 
 # 参考文献
-* http://sfoftime.web.fc2.com/actar/index.html
+
+http://sfoftime.web.fc2.com/actar/index.html
+
+キー配列いろいろ
+: http://novelgames.blog3.fc2.com/blog-entry-26.html
 
 JLOD配列の省略化キーが打ち辛い。
 : http://d.hatena.ne.jp/nullplus/20101121/1290348535
@@ -57,3 +59,4 @@ Dvorak配列をベースにした拡張ローマ字入力『ACT』
 https://sites.google.com/site/aourhairetu/Home
 ローマ字
 
+アルペジオ打鍵とは指の運動特性に適合した同手打鍵の場合に、非常に素早く打鍵できる現象の事を言い、あたかもピアノでアルペジオを弾くように指が高速に動くことから、名付けられたもの。出典は角田博保、粕川正充 「連続打鍵列の打鍵時間に対する分析と考察」 1991年
