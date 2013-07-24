@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 require 'generator'
 
-# TODO: 
-
 describe Generator, '#変換表作成' do
   it 'タブ区切りの変換行を作成します' do
     g = Generator.new
