@@ -15,3 +15,12 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = 'random'
 end
+
+################################################################
+## SimpleCov
+## * https://github.com/colszowka/simplecov
+##
+require "simplecov"
+SimpleCov.start do
+  add_filter '/vendor/'
+end
