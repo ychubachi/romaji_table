@@ -1,5 +1,5 @@
-vendor/bundle
-vendor/bundle
+/vendor/bundle
+/.yardoc/
+/doc/
+/coverage/
 xmptmp-*
-.yardoc/
-doc/

@@ -1,7 +1,11 @@
 # A sample Gemfile
 source "https://rubygems.org"
 
-gem "pry"
-gem "rspec"
-gem 'guard-rspec'
-gem 'guard-yard'
+group :development do
+  gem "rspec"
+  gem "simplecov"
+  gem 'guard-rspec'
+  gem 'guard-yard'
+  gem 'guard-bundler'
+  gem "pry"
+end
