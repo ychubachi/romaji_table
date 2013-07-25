@@ -174,29 +174,86 @@ describe Generator, '#変換' do
   # # b) 番号を省略
   # #   母音鍵 [['an', 'ui', 'uu', 'ei', 'ou'', {左右: 左, 段: :下}]
 
-  # pending '母音のいちにキーボードのデフォルト位置を利用する方法'
-  # # c) キーボードのデフォルト位置を利用
-
-  # pending '位置を展開する操作を作る'
-  # #   入力: 位置 || [位置, ...] || 'aiueo'
-  # #   出力: 位置の配列
-
   # pending '子音は母音の数だけ反復して自動生成'
 
-  # pending '母音位置: :標準をつくる'
-
   ################################################################
-
-  
-  
 end
 
 
-describe Generator, '#五十音表' do
-  subject(:it) {Generator.new}
+describe Generator, '#行' do
+  subject(:it){Generator.new}
 
-  it '五十音表の内容を検査します' do
-    expect(it.五十音表 :あ行).to eq 'あいうえお'
+  it '行操作を検査します' do
+    expect(it.行 :あ行).to eq 'あいうえお'
+    expect(it.行 :か行).to eq 'かきくけこ'
+    expect(it.行 :さ行).to eq 'さしすせそ'
+    expect(it.行 :た行).to eq 'たちつてと'
+    expect(it.行 :な行).to eq 'なにぬねの'
+    expect(it.行 :は行).to eq 'はひふへほ'
+    expect(it.行 :ま行).to eq 'まみむめも'
+    expect(it.行 :や行).to eq 'や　ゆ　よ'
+    expect(it.行 :ら行).to eq 'らりるれろ'
+    expect(it.行 :わ行).to eq 'わゐ　ゑを'
+  end
+end
+
+describe Generator, '#母音位置' do
+  subject(:it){Generator.new}
+
+  it '番号を指定して母音位置を検査します' do
+    expect(it.母音位置(:左, :中, 番号: 0).length).to eq 1
+    expect(it.母音位置(:左, :中, 番号: 0)).to eq [{左右: :左, 段: :中, 番号: 0}]
+    expect{it.位置展開(:左, :中, 番号: -1)}.to raise_error
+  end
+  
+  it '母音位置を検査します' do
+    expect(it.母音位置(:左, :中).length).to eq 5
+    expect(it.母音位置(:左, :中)).
+      to eq [{左右: :左, 段: :中, 番号: 0},
+             {左右: :左, 段: :中, 番号: 4},
+             {左右: :左, 段: :中, 番号: 3},
+             {左右: :左, 段: :中, 番号: 2},
+             {左右: :左, 段: :中, 番号: 1}]
+  end
+  
+  it '母音順を設定して母音位置を検査します' do
+    it.母音順 = [4, 3, 2, 1, 0]
+    expect(it.母音位置(:左, :中)).
+      to eq [{左右: :左, 段: :中, 番号: 4},
+             {左右: :左, 段: :中, 番号: 3},
+             {左右: :左, 段: :中, 番号: 2},
+             {左右: :左, 段: :中, 番号: 1},
+             {左右: :左, 段: :中, 番号: 0}]
+    it.母音順 = nil
+    expect{it.母音位置(左右: :左, 段: :中)}.to raise_error
+  end
+end
+
+describe Generator, '#鍵盤母音位置' do
+  subject(:it){Generator.new}
+  
+  it '鍵盤母音位置を検査します' do
+    expect(it.鍵盤母音位置.length).to eq 5
+    expect(it.鍵盤母音位置).
+      to eq [{左右: :左, 段: :中, 番号: 0},
+             {左右: :左, 段: :中, 番号: 4},
+             {左右: :左, 段: :中, 番号: 3},
+             {左右: :左, 段: :中, 番号: 2},
+             {左右: :左, 段: :中, 番号: 1}]
+  end
+  
+  it '鍵盤を設定して鍵盤母音位置を検査します' do
+    it.鍵盤 = {
+      左: { 上: 'qwert', 中: 'asdfg', 下: 'zxcvb'},
+      右: { 上: 'yuiop', 中: 'hjkl;', 下: 'bnm,.'}
+    }
+    expect(it.鍵盤母音位置.length).to eq 5
+    expect(it.鍵盤母音位置).
+      to eq [{左右: :左, 段: :中, 番号: 0},
+             {左右: :右, 段: :上, 番号: 2},
+             {左右: :右, 段: :上, 番号: 1},
+             {左右: :左, 段: :上, 番号: 2},
+             {左右: :右, 段: :上, 番号: 3}]
   end
 end
 
