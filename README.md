@@ -41,7 +41,18 @@ X->小文字化->Lで十分
 -> 'bmwvz' {上: 'c',tw'}
 ```
 
-# 撥音
+# 日本語クラス名
+
+クラス名の先頭はアルファベットにしなくてはならない．
+
+例）
+  五十音表 = C五十音表.new
+
+ファイル名は
+  c五十音表.rb
+  c五十音表_spec.rb
+にしたい
+
 
 # 参考文献
 
@@ -60,3 +71,19 @@ https://sites.google.com/site/aourhairetu/Home
 ローマ字
 
 アルペジオ打鍵とは指の運動特性に適合した同手打鍵の場合に、非常に素早く打鍵できる現象の事を言い、あたかもピアノでアルペジオを弾くように指が高速に動くことから、名付けられたもの。出典は角田博保、粕川正充 「連続打鍵列の打鍵時間に対する分析と考察」 1991年
+
+ローマ字/ひらがな/かたかなを変換するgemを作った
+: http://mkdir.g.hatena.ne.jp/ymrl/20110407/1302163124
+
+romaji というライブラリを書いた。
+: http://makimoto.hatenablog.com/entry/2012/04/07/225741
+
+オレオレかん字しゅう合（KY100）を作ってみました
+: http://d.hatena.ne.jp/keita_yamaguchi/20080619/1213848566
+
+Wikipedia頻出の漢字集合「WPJ2000」を作ってみました
+: http://d.hatena.ne.jp/keita_yamaguchi/20080619/1213869551
+
+: http://d.hatena.ne.jp/keita_yamaguchi/20080620/1213966049
+
+[CoLT :: Add-ons for Firefox](https://addons.mozilla.org/ja/firefox/addon/colt/)

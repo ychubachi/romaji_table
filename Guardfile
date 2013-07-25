@@ -1,5 +1,4 @@
-# A sample Guardfile
-# More info at https://github.com/guard/guard#readme
+# -*- coding: utf-8 -*-
 
 guard 'bundler' do
   watch('Gemfile')
@@ -8,14 +7,8 @@ guard 'bundler' do
 end
 
 guard :rspec do
-  watch(%r{^spec/.+_spec\.rb$})
+  watch(%r{^spec/.+_spec\.rb$}u)
   watch(%r{^lib/(.+)\.rb$})     { |m| "spec/lib/#{m[1]}_spec.rb" }
   watch('spec/spec_helper.rb')  { "spec" }
-end
-
-guard 'yard' do
-  watch(%r{app/.+\.rb})
-  watch(%r{lib/.+\.rb})
-  watch(%r{ext/.+\.c})
-  watch('README.md')
+  watch('.rspec')  { "spec" }
 end
