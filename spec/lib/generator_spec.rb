@@ -47,7 +47,7 @@ describe Generator, '#変換' do
     it '例外処理を検査します' do
       g = Generator.new
       expect{g.変換(nil, 母音位置: [{左右: :右, 段: :中, 番号: 0}])}.to raise_error
-      expect{g.変換(:あ行, :母音)} #.to raise_error
+      expect{g.変換(:あ行, 母音位置: :母音)}.to raise_error
     end
   end
 
