@@ -96,6 +96,7 @@ class Generator
            子音位置: nil, 母音位置: nil,
            拗音化: nil, 撥音化: nil, 促音化: nil,
            位置: nil)
+
     case
     when 位置
       ローマ字 = ''
