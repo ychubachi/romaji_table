@@ -160,8 +160,7 @@ class Generator
     end
   end
 
-  def self.execute(filename)
-    contents = File.open(filename){ |f| f.read }
+  def self.execute(contents)
     g = Generator.new 
     g.instance_eval(contents)
   end
