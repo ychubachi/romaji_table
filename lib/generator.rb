@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
-require('pry')
-
 class Generator
   attr :母音順, true
   attr :鍵盤母音位置
