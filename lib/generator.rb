@@ -159,4 +159,10 @@ class Generator
       [{左右: 左右, 段: 段, 番号: 番号}]
     end
   end
+
+  def self.execute(filename)
+    contents = File.open(filename){ |f| f.read }
+    g = Generator.new 
+    g.instance_eval(contents)
+  end
 end
