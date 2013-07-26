@@ -267,6 +267,31 @@ describe Generator, '#鍵盤母音位置' do
   end
 end
 
+# 標準出力の検査用
+def capture(stream)
+    begin
+        stream = stream.to_s
+        eval "$#{stream} = StringIO.new"
+        yield
+        result = eval("$#{stream}").string
+    ensure
+        eval "$#{stream} = #{stream.upcase}"
+    end
+    result
+end
+
+describe Generator, '#execute' do
+  it 'DSL' do
+    expect(
+      capture(:stdout) {
+        Generator.execute <<-EOS
+          変換 あ行, 母音位置: {左右: :左, 段: :中}
+        EOS
+      }
+    ).to eq "a\tあ\ni\tい\nu\tう\ne\tえ\no\tお\n"
+  end
+end
+
 describe Generator, 'TODO' do
   pending '子音位置登録をつくる'
   # {:か行} = {いち}

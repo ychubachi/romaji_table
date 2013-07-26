@@ -4,8 +4,12 @@
 class Generator
   attr :母音順, true
   attr :鍵盤母音位置
+  attr :変換表
 
   def initialize
+    # 変換表の生成結果を格納する配列
+    @変換表 = []
+
     # キーボード配列の表
     self.鍵盤 = {
       左: { 上: '\',.py', 中: 'aoeui', 下: ';qjkx' },
@@ -74,6 +78,7 @@ class Generator
   end
   
   def 変換表作成(ローマ字, かな)
+    @変換表 << [ローマ字, かな]
     [ローマ字, かな]
   end
 
@@ -163,5 +168,8 @@ class Generator
   def self.execute(contents)
     g = Generator.new 
     g.instance_eval(contents)
+    g.変換表.each do |(k, v)|
+      puts "#{k}\t#{v}"
+    end
   end
 end

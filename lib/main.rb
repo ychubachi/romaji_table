@@ -3,9 +3,10 @@
 require './generator'
 
 Generator.execute <<-EOS
-      #{DATA.read}
+  #{DATA.read}
 EOS
 __END__
 
 # ローマ字変換表
-p 変換 あ行, 母音位置: {左右: :左, 段: :中}
+変換 あ行, 母音位置: {左右: :左, 段: :中}
+変換 あ行, 母音位置: {左右: :左, 段: :中}
