@@ -43,6 +43,14 @@ class Generator
       りゃ行: ['りゃ', 'りぃ', 'りゅ', 'れぇ', 'りょ']
     }
     
+    # が行(), さ行() ... 操作を追加
+    @五十音表.each_key do |行|
+      eval <<-RUBY
+            def #{行}
+              @五十音表[:#{行}]
+            end
+          RUBY
+    end
   end
 
   def 鍵盤=(鍵盤)
