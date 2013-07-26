@@ -1,8 +1,11 @@
+# 現状の不満
+
+「ふぁいる」
+
 # はじめに
 このツールの目的は，最適化されたDvorakベースのローマ字かな変換表を作成
 するためのスクリプトをつくることです．変換ルールを記述するためのDSLを
 提供し，いかなる配列にも対応できるようにすることを目指します．
-
 
 入力…変換ルール
 出力…ローマ字かな変換表(Google IME, IME, ATOKなど)
@@ -58,8 +61,7 @@ X->小文字化->Lで十分
 
 http://sfoftime.web.fc2.com/actar/index.html
 
-キー配列いろいろ
-: http://novelgames.blog3.fc2.com/blog-entry-26.html
+* [キー配列いろいろ | 増山洋一のフラグ立て](http://novelgames.blog3.fc2.com/blog-entry-26.html)
 
 JLOD配列の省略化キーが打ち辛い。
 : http://d.hatena.ne.jp/nullplus/20101121/1290348535
@@ -72,20 +74,11 @@ https://sites.google.com/site/aourhairetu/Home
 
 アルペジオ打鍵とは指の運動特性に適合した同手打鍵の場合に、非常に素早く打鍵できる現象の事を言い、あたかもピアノでアルペジオを弾くように指が高速に動くことから、名付けられたもの。出典は角田博保、粕川正充 「連続打鍵列の打鍵時間に対する分析と考察」 1991年
 
-ローマ字/ひらがな/かたかなを変換するgemを作った
-: http://mkdir.g.hatena.ne.jp/ymrl/20110407/1302163124
-
-romaji というライブラリを書いた。
-: http://makimoto.hatenablog.com/entry/2012/04/07/225741
-
-オレオレかん字しゅう合（KY100）を作ってみました
-: http://d.hatena.ne.jp/keita_yamaguchi/20080619/1213848566
-
-Wikipedia頻出の漢字集合「WPJ2000」を作ってみました
-: http://d.hatena.ne.jp/keita_yamaguchi/20080619/1213869551
-
-: http://d.hatena.ne.jp/keita_yamaguchi/20080620/1213966049
-
+* [ローマ字/ひらがな/かたかなを変換するgemを作った](http://mkdir.g.hatena.ne.jp/ymrl/20110407/1302163124)
+* [romaji というライブラリを書いた。](http://makimoto.hatenablog.com/entry/2012/04/07/225741)
+* [オレオレかん字しゅう合（KY100）を作ってみました](http://d.hatena.ne.jp/keita_yamaguchi/20080619/1213848566)
+* [Wikipedia頻出の漢字集合「WPJ2000」を作ってみました](http://d.hatena.ne.jp/keita_yamaguchi/20080619/1213869551)
 * [CoLT :: Add-ons for Firefox](https://addons.mozilla.org/ja/firefox/addon/colt/)
-
 * [RubyでDSL作ってみる - TakiTakeの日記](http://takitake.hatenablog.com/entry/2013/05/03/235622)
+* [「99式」日本語のローマ字表記｜公益社団法人国際日本語学会日本ローマ字会](http://roomazi.org/99/details.html)
+* [日本式ローマ字 - Wikipedia](https://ja.wikipedia.org/wiki/%E6%97%A5%E6%9C%AC%E5%BC%8F%E3%83%AD%E3%83%BC%E3%83%9E%E5%AD%97)
