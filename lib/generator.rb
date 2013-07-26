@@ -152,10 +152,6 @@ class Generator
     end
   end
 
-  def 行(行)
-    @五十音表[行]
-  end
-
   def 母音位置(左右, 段, 番号: nil)
     case
     when !番号
