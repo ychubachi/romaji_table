@@ -86,4 +86,6 @@ Wikipedia頻出の漢字集合「WPJ2000」を作ってみました
 
 : http://d.hatena.ne.jp/keita_yamaguchi/20080620/1213966049
 
-[CoLT :: Add-ons for Firefox](https://addons.mozilla.org/ja/firefox/addon/colt/)
+* [CoLT :: Add-ons for Firefox](https://addons.mozilla.org/ja/firefox/addon/colt/)
+
+* [RubyでDSL作ってみる - TakiTakeの日記](http://takitake.hatenablog.com/entry/2013/05/03/235622)
