@@ -145,7 +145,8 @@ class Generator
     end
   end
 
-  def 母音位置(左右, 段, 番号: nil)
+  # TODO: Hashを渡したほうがスマートか？
+  def 母音位置正規化(左右, 段, 番号: nil)
     case
     when !番号
       @母音順 or raise '番号を省略する場合は母音順を設定してください．'
