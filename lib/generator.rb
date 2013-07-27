@@ -11,10 +11,10 @@ class Generator
     @変換表 = []
 
     # キーボード配列の表
-    self.鍵盤 = {
-      左: { 上: '\',.py', 中: 'aoeui', 下: ';qjkx' },
-      右: { 上: 'fgcrl',  中: 'dhtns', 下: 'bmwvz' }
-    }
+    鍵盤({
+           左: { 上: '\',.py', 中: 'aoeui', 下: ';qjkx' },
+           右: { 上: 'fgcrl',  中: 'dhtns', 下: 'bmwvz' }
+         })
     
     # 01234    04321
     # aiueo -> aoeui
@@ -79,7 +79,7 @@ class Generator
     end
   end
 
-  def 鍵盤=(鍵盤)
+  def 鍵盤(鍵盤)
     @鍵盤 = 鍵盤
 
     # 母音を検索
