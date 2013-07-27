@@ -3,6 +3,8 @@
 require 'generator'
 
 describe Generator, '#変換' do
+  subject(:it){Generator.new}
+
   context '直接' do
     it '直接位置指定登録を検査します' do 
       g = Generator.new
@@ -44,7 +46,7 @@ describe Generator, '#変換' do
       expect{g.変換(:あ行, 母音位置: [{左右: :右, 段: :中, 番号: 0}])}.to raise_error
     end
 
-    it '例外処理を検査します' do
+    it '例外を検査します' do
       g = Generator.new
       expect{g.変換(nil, 母音位置: [{左右: :右, 段: :中, 番号: 0}])}.to raise_error
       expect{g.変換(:あ行, 母音位置: :母音)}.to raise_error
@@ -52,6 +54,11 @@ describe Generator, '#変換' do
   end
 
   context '子音' do
+    it '例外を検査します' do
+      expect{it.変換(:か行, 子音位置: {左右: :右, 段: :上}, 母音位置: :鍵盤)}.
+        to raise_error
+    end
+
     it '静音を検査します' do
       g = Generator.new
       g.変換(:か行, 子音位置: {左右: :右, 段: :上, 番号: 2}, 母音位置: :鍵盤).
@@ -267,6 +274,24 @@ describe Generator, '#鍵盤母音位置' do
   end
 end
 
+describe Generator, '#二重母音' do
+  subject(:it){Generator.new}
+
+  it '二重母音を登録する' do
+    pending
+    expect(it.二重母音登録 ['あん', 'うい', 'うう', 'えい', 'おう'])
+  end
+  it '行を二重母音にする' do
+    pending '二重母音を合成する方法？？'
+    expect(it.二重母音(:あ行)).to eq ['あん', 'うい', 'うう', 'えい', 'おう']
+    expect(it.二重母音(:か行)).to eq ['かん', 'くい', 'くう', 'けい', 'こう']
+  end
+end
+
+################################################################
+# DSL
+#
+
 # 標準出力の検査用
 def capture(stream)
     begin
@@ -290,15 +315,6 @@ describe Generator, '#execute' do
       }
     ).to eq "a\tあ\ni\tい\nu\tう\ne\tえ\no\tお\n"
   end
-end
-
-describe Generator, 'TODO' do
-  pending '子音位置登録をつくる'
-  # {:か行} = {いち}
-  
-  pending '二重母音の位置を省略して登録する方法'
-  # # b) 番号を省略
-  # #   母音鍵 [['an', 'ui', 'uu', 'ei', 'ou'', {左右: 左, 段: :下}]
 end
 
 # Coverage
