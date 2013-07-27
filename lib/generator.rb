@@ -77,6 +77,8 @@ class Generator
             end
           RUBY
     end
+
+    @二重母音 = nil
   end
 
   def 鍵盤(鍵盤)
@@ -194,6 +196,23 @@ class Generator
       (0..4).include?(番号) or raise '番号は[0..4]で指定してください．'
       [{左右: 左右, 段: 段, 番号: 番号}]
     end
+  end
+
+  def 二重母音登録(二重母音)
+    @二重母音 = 二重母音
+  end
+
+  def 二重母音(行)
+    if @二重母音 == nil
+      raise '二重母音が登録されてません'
+    end
+
+    結果 = []
+    @二重母音.each do |二重母音|
+      段 = @五十音表[:あ行].index(二重母音[0])
+      結果 << "#{行[段]}#{二重母音[1]}"
+    end
+    結果
   end
 
   def self.execute(contents)

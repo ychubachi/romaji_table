@@ -274,17 +274,25 @@ describe Generator, '#鍵盤母音' do
   end
 end
 
+describe Generator, '二重母音登録' do
+  subject(:it){Generator.new}
+  
+  it '二重母音を登録する' do
+    expect(it.二重母音登録 ['あん', 'うい', 'うう', 'えい', 'おう']).to eq ["あん", "うい", "うう", "えい", "おう"]
+  end
+end  
+
 describe Generator, '#二重母音' do
   subject(:it){Generator.new}
-
-  it '二重母音を登録する' do
-    pending
-    expect(it.二重母音登録 ['あん', 'うい', 'うう', 'えい', 'おう'])
-  end
+    
   it '行を二重母音にする' do
-    pending '二重母音を合成する方法？？'
-    expect(it.二重母音(:あ行)).to eq ['あん', 'うい', 'うう', 'えい', 'おう']
-    expect(it.二重母音(:か行)).to eq ['かん', 'くい', 'くう', 'けい', 'こう']
+    expect{it.二重母音(it.あ行)}.to raise_error
+    it.二重母音登録 ['あん', 'うい', 'うう', 'えい', 'おう']
+    expect(it.二重母音(it.あ行)).to eq ['あん', 'うい', 'うう', 'えい', 'おう']
+    expect(it.二重母音(it.か行)).to eq ['かん', 'くい', 'くう', 'けい', 'こう']
+    expect(it.二重母音(it.しゃ行)).to eq ["しゃん", "しゅい", "しゅう", "しぇい", "しょう"]
+    it.二重母音登録 ['えあ', 'いう', 'うえ']
+    expect(it.二重母音(it.か行)).to eq ['けあ', 'きう', 'くえ']
   end
 end
 
