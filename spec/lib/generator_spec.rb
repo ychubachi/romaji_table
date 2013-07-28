@@ -258,9 +258,13 @@ describe Generator, '#鍵盤母音' do
              {左右: :左, 段: :中, 番号: 2},
              {左右: :左, 段: :中, 番号: 1}]
   end
+end
+
+describe Generator, '#鍵盤登録' do
+  subject(:it){Generator.new}
   
-  it '鍵盤を設定して鍵盤母音を検査します' do
-    it.鍵盤({
+  it '鍵盤を登録して鍵盤母音を検査します' do
+    it.鍵盤登録({
               左: { 上: 'qwert', 中: 'asdfg', 下: 'zxcvb'},
               右: { 上: 'yuiop', 中: 'hjkl;', 下: 'bnm,.'}
             })

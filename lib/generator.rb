@@ -11,7 +11,7 @@ class Generator
     @変換表 = []
 
     # キーボード配列の表
-    鍵盤({
+    鍵盤登録({
            左: { 上: '\',.py', 中: 'aoeui', 下: ';qjkx' },
            右: { 上: 'fgcrl',  中: 'dhtns', 下: 'bmwvz' }
          })
@@ -81,7 +81,7 @@ class Generator
     @二重母音 = nil
   end
 
-  def 鍵盤(鍵盤)
+  def 鍵盤登録(鍵盤)
     @鍵盤 = 鍵盤
 
     # 母音を検索
