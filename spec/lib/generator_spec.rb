@@ -54,9 +54,16 @@ describe Generator, '#変換' do
   end
 
   context '子音' do
+    subject(:it){Generator.new}
+
     it '例外を検査します' do
       expect{it.変換(:か行, 子音: {左右: :右, 段: :上}, 母音: :鍵盤)}.
         to raise_error
+    end
+
+    it '座標で子音を登録します' do
+      expect(it.変換(:か行, 子音: [:右, :上, 2], 母音: :鍵盤)).
+        to eq([["ca", "か"], ["ci", "き"], ["cu", "く"], ["ce", "け"], ["co", "こ"]])
     end
 
     it '静音を検査します' do
@@ -145,6 +152,17 @@ describe Generator, '#変換' do
              ).
          should eq([["cd'", "きゃっ"], ["cdy", "きぃっ"], ["cdp", "きゅっ"], ["cd.", "きぇっ"], ["cd,", "きょっ"]])
     end
+
+    it '子音＋拗音化＋母音を検査します（座標指定）' do
+      g = Generator.new
+      g.変換(:きゃ行, 子音: [:右, :上, 2], 拗音化: [:右, :中, 1], 母音: :鍵盤).
+         should eq([["cha", "きゃ"], ["chi", "きぃ"], ["chu", "きゅ"], ["che", "きぇ"], ["cho", "きょ"]])
+    end
+
+    it '拗音化キーの省略の例外処理' do
+      expect{it.変換(:きゃ行, 子音: [:右, :上, 2], 拗音化: {位置: :右, 段: :中}, 母音: :鍵盤)}.
+        to raise_error("拗音化の番号は省略できません")
+    end
   end
 
   context '二重母音' do
@@ -173,56 +191,6 @@ describe Generator, '#initialize' do
   
   it '生成されたか？' do
     expect(it).not_to be nil
-  end
-end
-
-describe Generator, 'private' do
-  subject(:it) {Generator.new}
-  
-  describe '#変換表作成' do
-    it '変換表が追加されたか？' do
-      expect(it.send(:変換表作成, 'a', 'あ')).to eq ["a", "あ"]
-    end
-  end
-  
-  describe '#省略R' do
-    it '鍵の位置を省略して指定します' do
-      expect(it.send(:省略R, 位置: {左右: :左, 段: :中, 番号: 0})).to eq 'a'
-      expect(it.send(:省略R, 位置: {左右: :左, 番号: 0}, 段: :中)).to eq 'a'
-      expect{it.send(:省略R, 位置: {左右: :左, 番号: 0})}.to raise_error
-      expect(it.send(:省略R, 位置: {})).to eq ''
-    end
-  end
-  
-  describe '#母音位置正規化' do
-    it '番号を指定して母音を検査します' do
-      expect(it.send(:母音位置正規化, :左, :中, 番号: 0).length).to eq 1
-      expect(it.send(:母音位置正規化, :左, :中, 番号: 0)).to eq [{左右: :左, 段: :中, 番号: 0}]
-      expect{it.send(:母音位置正規化, :左, :中, 番号: -1)}.to raise_error
-    end
-    
-    it '母音を検査します' do
-      expect(it.send(:母音位置正規化, :左, :中).length).to eq 5
-      expect(it.send(:母音位置正規化, :左, :中)).
-        to eq [{左右: :左, 段: :中, 番号: 0},
-               {左右: :左, 段: :中, 番号: 4},
-               {左右: :左, 段: :中, 番号: 3},
-               {左右: :左, 段: :中, 番号: 2},
-               {左右: :左, 段: :中, 番号: 1}]
-    end
-  
-    it '母音順を設定して母音を検査します' do
-      it.母音順 = [4, 3, 2, 1, 0]
-      # todo 数もチェック
-      expect(it.send(:母音位置正規化, :左, :中)).
-        to eq [{左右: :左, 段: :中, 番号: 4},
-               {左右: :左, 段: :中, 番号: 3},
-               {左右: :左, 段: :中, 番号: 2},
-               {左右: :左, 段: :中, 番号: 1},
-               {左右: :左, 段: :中, 番号: 0}]
-      it.母音順 = nil
-      expect{it.母音位置正規化(左右: :左, 段: :中)}.to raise_error
-    end
   end
 end
 
@@ -329,6 +297,59 @@ describe Generator, '#execute' do
                変換 あ行, 母音: {左右: :左, 段: :中}
              EOS
            }).to eq "a\tあ\ni\tい\nu\tう\ne\tえ\no\tお\n"
+  end
+end
+
+################################################################
+# Private methods
+#
+describe Generator, 'private' do
+  subject(:it) {Generator.new}
+
+  describe '#変換表作成' do
+    it '変換表が追加されたか？' do
+      expect(it.send(:変換表作成, 'a', 'あ')).to eq ["a", "あ"]
+    end
+  end
+
+  describe '#省略R' do
+    it '鍵の位置を省略して指定します' do
+      expect(it.send(:省略R, 位置: {左右: :左, 段: :中, 番号: 0})).to eq 'a'
+      expect(it.send(:省略R, 位置: {左右: :左, 番号: 0}, 段: :中)).to eq 'a'
+      expect{it.send(:省略R, 位置: {左右: :左, 番号: 0})}.to raise_error
+      expect(it.send(:省略R, 位置: {})).to eq ''
+    end
+  end
+
+  describe '#母音位置正規化' do
+    it '番号を指定して母音を検査します' do
+      expect(it.send(:母音位置正規化, :左, :中, 番号: 0).length).to eq 1
+      expect(it.send(:母音位置正規化, :左, :中, 番号: 0)).to eq [{左右: :左, 段: :中, 番号: 0}]
+      expect{it.send(:母音位置正規化, :左, :中, 番号: -1)}.to raise_error
+    end
+
+    it '母音を検査します' do
+      expect(it.send(:母音位置正規化, :左, :中).length).to eq 5
+      expect(it.send(:母音位置正規化, :左, :中)).
+        to eq [{左右: :左, 段: :中, 番号: 0},
+               {左右: :左, 段: :中, 番号: 4},
+               {左右: :左, 段: :中, 番号: 3},
+               {左右: :左, 段: :中, 番号: 2},
+               {左右: :左, 段: :中, 番号: 1}]
+    end
+
+    it '母音順を設定して母音を検査します' do
+      it.母音順 = [4, 3, 2, 1, 0]
+      # todo 数もチェック
+      expect(it.send(:母音位置正規化, :左, :中)).
+        to eq [{左右: :左, 段: :中, 番号: 4},
+               {左右: :左, 段: :中, 番号: 3},
+               {左右: :左, 段: :中, 番号: 2},
+               {左右: :左, 段: :中, 番号: 1},
+               {左右: :左, 段: :中, 番号: 0}]
+      it.母音順 = nil
+      expect{it.母音位置正規化(左右: :左, 段: :中)}.to raise_error
+    end
   end
 end
 
