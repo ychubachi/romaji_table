@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
-require 'c鍵盤'
-require 'c五十音'
+require_relative 'c鍵盤'
+require_relative 'c五十音'
 
 class Generator
   attr :母音順, true
