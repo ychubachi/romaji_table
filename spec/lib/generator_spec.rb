@@ -59,6 +59,10 @@ describe Generator, '#変換' do
     it '例外を検査します' do
       expect{it.変換(:か行, 子音: {左右: :右, 段: :上}, 母音: :鍵盤)}.
         to raise_error
+      expect{it.変換(:か行, 子音: :しいん, 母音: :鍵盤)}.
+        to raise_error '子音は連想配列または配列で指定してください'
+      expect{it.変換(:か行, 拗音化: :ようおん, 母音: :鍵盤)}.
+        to raise_error '拗音は連想配列または配列で指定してください'
     end
 
     it '座標で子音を登録します' do
