@@ -9,6 +9,9 @@ class Generator
   attr :鍵盤母音
   attr :変換表
 
+  Qwerty = C鍵盤::Qwerty
+  Dvorak = C鍵盤::Dvorak
+
   # DSL実行
   def self.execute(contents)
     g = Generator.new 
