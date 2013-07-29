@@ -12,7 +12,7 @@ class C鍵盤
 
   Qwerty = {
               左: { 上: 'qwert', 中: 'asdfg', 下: 'zxcvb'},
-              右: { 上: 'yuiop', 中: 'hjkl;', 下: 'bnm,.'}
+              右: { 上: 'yuiop', 中: 'hjkl;', 下: 'nm,./'}
             }
   
   def initialize
