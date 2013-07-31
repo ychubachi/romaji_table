@@ -68,6 +68,11 @@ class Generator
       raise '二重母音が登録されてません'
     end
 
+    case 行
+    when Symbol
+      行 = @五十音.表[行]
+    end
+
     結果 = []
     @二重母音.each do |二重母音|
       段 = @五十音.表[:あ行].index(二重母音[0])
