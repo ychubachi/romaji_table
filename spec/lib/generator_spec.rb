@@ -6,7 +6,7 @@ describe Generator, '#変換' do
   subject(:it){Generator.new}
 
   context '直接' do
-    it '直接位置指定登録を検査します' do 
+    it '直接位置指定登録を検査します' do
       g = Generator.new
       g.変換('っ', 位置: [{左右: :左, 段: :上, 番号: 0}]).should eq([["'", "っ"]])
       g.変換('，', 位置: [{左右: :左, 段: :上, 番号: 1}]).should eq([[",", "，"]])
@@ -37,7 +37,7 @@ describe Generator, '#変換' do
       g.変換('あいうえお', 母音: {左右: :左, 段: :中}).
         should eq([["a", "あ"], ["i", "い"], ["u", "う"], ["e", "え"], ["o", "お"]])
     end
-    
+
     it 'シンボルでかな，および，配列で母音の位置を指定して，母音を検査します（あいうえお）' do
       g = Generator.new
       g.変換(:あ行, 母音: [{左右: :右, 段: :中, 番号: 0}, {左右: :右, 段: :中, 番号: 1}, {左右: :右, 段: :中, 番号: 2},
@@ -85,11 +85,11 @@ describe Generator, '#変換' do
       g.変換(:ま行, 子音: {左右: :右, 段: :下, 番号: 1}, 母音: :鍵盤).
         should eq([["ma", "ま"], ["mi", "み"], ["mu", "む"], ["me", "め"], ["mo", "も"]])
       g.変換(:や行, 子音: {左右: :右, 段: :下, 番号: 3}, 母音: :鍵盤).
-        should eq([["va", "や"], ["vi", "　"], ["vu", "ゆ"], ["ve", "　"], ["vo", "よ"]])
+        should eq([["va", "や"], ["vi", "い"], ["vu", "ゆ"], ["ve", "え"], ["vo", "よ"]])
       g.変換(:ら行, 子音: {左右: :右, 段: :上, 番号: 3}, 母音: :鍵盤).
         should eq([["ra", "ら"], ["ri", "り"], ["ru", "る"], ["re", "れ"], ["ro", "ろ"]])
       g.変換(:わ行, 子音: {左右: :右, 段: :下, 番号: 2}, 母音: :鍵盤).
-        should eq([["wa", "わ"], ["wi", "ゐ"], ["wu", "　"], ["we", "ゑ"], ["wo", "を"]])
+        should eq([["wa", "わ"], ["wi", "ゐ"], ["wu", "う"], ["we", "ゑ"], ["wo", "を"]])
     end
 
     it '濁音・半濁音を検査します' do
@@ -116,7 +116,7 @@ describe Generator, '#変換' do
         should eq([[";", "あん"], ["x", "いん"], ["k", "うん"],
                    ["j", "えん"], ["q", "おん"]])
     end
-    
+
     it '子音+母音+撥音（一括）を検査します' do
       it.変換("かきくけこ", 子音: {左右: :右, 段: :上, 番号: 2}, 撥音化: {}, 母音: {左右: :左, 段: :下}).
         should eq([["c;", "かん"], ["cx", "きん"], ["ck", "くん"], ["cj", "けん"], ["cq", "こん"]])
@@ -124,6 +124,13 @@ describe Generator, '#変換' do
   end
 
   context '拗音化' do
+    subject(:it){Generator.new}
+
+    it 'ぁ行を検査します' do
+      expect(it.変換 :ぁ行, 拗音化: {左右: :右, 段: :上, 番号: 4}, 母音: {左右: :左, 段: :中}).
+        to eq [["la", "ぁ"], ["li", "ぃ"], ["lu", "ぅ"], ["le", "ぇ"], ["lo", "ぉ"]]
+    end
+
     it '子音＋拗音化＋母音を検査します' do
       g = Generator.new
       g.変換(:きゃ行, 子音: {左右: :右, 段: :上, 番号: 2}, 拗音化: {左右: :右, 番号: 1}, 母音: :鍵盤).
@@ -139,7 +146,7 @@ describe Generator, '#変換' do
              母音: {左右: :左, 段: :下}).
          should eq([["cg;", "きゃん"], ["cgx", "きぃん"], ["cgk", "きゅん"], ["cgj", "きぇん"], ["cgq", "きょん"]])
     end
-    
+
     it '子音＋拗音＋母音＋促音を検査します' do
       g = Generator.new
       g.変換(:きゃ行,
@@ -178,7 +185,7 @@ describe Generator, '#変換' do
              ).
         should eq([["'", "あい"], ["y", "うい"], ["p", "うう"], [".", "えい"], [",", "おう"]])
     end
-    
+
     # かい，くい（キー），くう（クー），けい（ケー），こう（コー）
     it '二重母音（かい，こう，けい，くう，くい）を検査します' do
       g = Generator.new
@@ -191,9 +198,9 @@ describe Generator, '#変換' do
   end
 end
 
-describe Generator, '#initialize' do  
+describe Generator, '#initialize' do
   subject(:it) {Generator.new}
-  
+
   it '生成されたか？' do
     expect(it).not_to be nil
   end
@@ -210,9 +217,9 @@ describe Generator, '#行' do
     expect(it.な行.join).to eq 'なにぬねの'
     expect(it.は行.join).to eq 'はひふへほ'
     expect(it.ま行.join).to eq 'まみむめも'
-    expect(it.や行.join).to eq 'や　ゆ　よ'
+    expect(it.や行.join).to eq 'やいゆえよ'
     expect(it.ら行.join).to eq 'らりるれろ'
-    expect(it.わ行.join).to eq 'わゐ　ゑを'
+    expect(it.わ行.join).to eq 'わゐうゑを'
     # TODO: きゃきぃきゅきぇきょなど
   end
 end
@@ -225,7 +232,7 @@ end
 
 describe Generator, '#鍵盤母音' do
   subject(:it){Generator.new}
-  
+
   it '鍵盤母音を検査します' do
     expect(it.鍵盤母音.length).to eq 5
     expect(it.鍵盤母音).
@@ -239,7 +246,7 @@ end
 
 describe Generator, '#鍵盤登録' do
   subject(:it){Generator.new}
-  
+
   it '鍵盤を登録して鍵盤母音を検査します' do
     it.鍵盤登録({
               左: { 上: 'qwert', 中: 'asdfg', 下: 'zxcvb'},
@@ -257,15 +264,15 @@ end
 
 describe Generator, '二重母音登録' do
   subject(:it){Generator.new}
-  
+
   it '二重母音を登録する' do
     expect(it.二重母音登録 ['あん', 'うい', 'うう', 'えい', 'おう']).to eq ["あん", "うい", "うう", "えい", "おう"]
   end
-end  
+end
 
 describe Generator, '#二重母音' do
   subject(:it){Generator.new}
-    
+
   it '行を二重母音にする' do
     expect{it.二重母音(it.あ行)}.to raise_error
     it.二重母音登録 ['あん', 'うい', 'うう', 'えい', 'おう']

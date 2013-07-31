@@ -14,7 +14,7 @@ class Generator
 
   # DSL実行
   def self.execute(contents)
-    g = Generator.new 
+    g = Generator.new
     g.instance_eval(contents)
     g.変換表.each do |(k, v)|
       puts "#{k}\t#{v}"
@@ -28,7 +28,7 @@ class Generator
 
     # キーボード配列の表
     @鍵盤 = C鍵盤.new
-    
+
     # 01234    04321
     # aiueo -> aoeui
     self.母音順 = [0, 4, 3, 2, 1]
@@ -146,12 +146,19 @@ class Generator
       end
 
       子音R = 子音   ? @鍵盤[子音[:左右]][子音[:段]][子音[:番号]] : ''
-      拗音R = 拗音化 ? 省略R(位置: 拗音化, 段: 子音[:段]) : ''
-      促音R = 促音化 ? 省略R(位置: 促音化, 段: 子音[:段]) : ''
-      
+
+      # TODO: ここのロジックを見直します
+      if 子音
+        拗音R = 拗音化 ? 省略R(位置: 拗音化, 段: 子音[:段]) : ''
+        促音R = 促音化 ? 省略R(位置: 促音化, 段: 子音[:段]) : ''
+      else
+        拗音R = 拗音化 ? 省略R(位置: 拗音化, 段: nil) : ''
+        促音R = 促音化 ? 省略R(位置: 促音化, 段: nil) : ''
+      end
+
       促音  = 促音化 ? 'っ' : ''
       撥音  = 撥音化 ? 'ん' : ''
-      
+
       結果 = []
       [かな, 母音].transpose.each do | (かなI, 母音I) |
         母音R = @鍵盤[母音I[:左右]][母音I[:段]][母音I[:番号]]
@@ -162,7 +169,7 @@ class Generator
   end
 
   private
-  
+
   def 変換表作成(ローマ字, かな)
     @変換表 << [ローマ字, かな]
     [ローマ字, かな]
