@@ -6,5 +6,9 @@ group :development do
   gem "simplecov"
   gem 'guard-rspec'
   gem 'guard-bundler'
+  gem 'guard-yard'
   gem "pry"
+  gem 'yard'
+  gem 'redcarpet'
+  gem 'github-markup'
 end
