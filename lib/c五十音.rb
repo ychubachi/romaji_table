@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# 99式ローマ字
-# http://roomazi.org/99/details.html
-
+# # hoge
+# [Class: YARD::CLI::Yardoc — Documentation for yard (0.8.7)](http://rubydoc.info/docs/yard/YARD/CLI/Yardoc)
+# [99式ローマ字](http://roomazi.org/99/details.html)
 class C五十音
   attr :表
 

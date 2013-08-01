@@ -1,9 +1,27 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
+
 require_relative 'c鍵盤'
 require_relative 'c五十音'
 
+=begin
+# ローマ字変換表生成器
+
+# ほげ
+位置とは，連想配列による鍵盤の座標表現のことである．
+
+ hoge
+
+```ruby
+ a = a + 1
+ if hoge
+   p 'baka'
+ end
+```
+
+do_this_and_do_that_and_another_thing
+=end
 class Generator
   attr :母音順, true
   attr :鍵盤母音
@@ -81,7 +99,13 @@ class Generator
     結果
   end
 
-  # DSL
+=begin
+
+=end
+  # 「かな」がStringのときは1文字毎に，Arrayの場合は要素毎に変換規則を生成する．
+  #
+  # @param かな [String, Array<String>]  打鍵順序に対応づけるひらがなである．
+  # @param [Array] 母音 母音の位置を指定する配列．必ず「かな」と同じ長さであること．
   def 変換(かな,
            子音: nil, 母音: nil,
            拗音化: nil, 撥音化: nil, 促音化: nil,
