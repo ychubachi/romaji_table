@@ -227,7 +227,13 @@ end
 describe Generator, '#母音' do
   subject(:it){Generator.new}
 
-
+  it '母音の段を省略する' do
+    it.二重母音登録 ['うう', 'おう']
+    expect(it.変換 it.二重母音(:にゃ行), 子音: {左右: :右, 段: :中, 番号: 3}, 母音: [{左右: :右, 番号: 2}, {左右: :右, 番号: 4}]).
+      to eq [["nt", "にゅう"], ["ns", "にょう"]]
+    expect(it.変換 it.二重母音(:みゃ行), 子音: {左右: :右, 段: :下, 番号: 1}, 母音: [{左右: :右, 番号: 2}, {左右: :右, 番号: 4}]).
+      to eq [["mw", "みゅう"], ["mz", "みょう"]]
+  end
 end
 
 describe Generator, '#鍵盤母音' do
@@ -262,7 +268,7 @@ describe Generator, '#鍵盤登録' do
   end
 end
 
-describe Generator, '二重母音登録' do
+describe Generator, '#二重母音登録' do
   subject(:it){Generator.new}
 
   it '二重母音を登録する' do

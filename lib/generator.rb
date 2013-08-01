@@ -134,6 +134,16 @@ class Generator
           raise '拗音は連想配列または配列で指定してください'
         end
 
+      if 母音.is_a? Array # ここは手抜きです
+        n = 母音.length - 1
+        for i in 0..n
+          if 母音[i][:段] == nil
+            母音[i] = 母音[i].dup
+            母音[i][:段] = 子音[:段]
+          end
+        end
+      end
+
       母音 =
         case 母音
         when Array
