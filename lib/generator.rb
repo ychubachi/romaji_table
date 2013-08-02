@@ -102,10 +102,12 @@ class Generator
 =begin
 
 =end
-  # 「かな」がStringのときは1文字毎に，Arrayの場合は要素毎に変換規則を生成する．
+  # 子音と母音の位置を指定する．
   #
-  # @param かな [String, Array<String>]  打鍵順序に対応づけるひらがなである．
-  # @param [Array] 母音 母音の位置を指定する配列．必ず「かな」と同じ長さであること．
+  # @param かな [String, Array<String>, Symbol]  打鍵順序に対応づけるひらがなである．「かな」がStringのときは1文字毎に，Arrayの場合は要素毎に変換規則を生成する．またSynbolの場合，{C五十音#表}の行を表す．
+  # @param 母音 [Array, Hash] 母音の位置を指定するArrayもしくはHash．内部で配列に変換し，{#母音位置正規化}する．必ず「かな」と同じ長さになるようにすること．
+  # @param 子音 [Hash, Array] 子音の位置を指定するHash．位置を省略したArrayも使えるが，不要かもしれない．
+  # @return [Array] ローマ字変換列
   def 変換(かな,
            子音: nil, 母音: nil,
            拗音化: nil, 撥音化: nil, 促音化: nil,
@@ -119,17 +121,7 @@ class Generator
       end
       [変換表作成(ローマ字, かな)]
     else
-      かな =
-        case かな
-        when Array
-          かな
-        when String
-          かな.split("")
-        when Symbol
-          @五十音.表[かな]
-        else
-          raise 'かなはシンボル，文字列，配列で指定してください'
-        end
+      かな配列 = かな配列化 かな
 
       子音 =
         case 子音
@@ -158,30 +150,30 @@ class Generator
           raise '拗音は連想配列または配列で指定してください'
         end
 
-      if 母音.is_a? Array # ここは手抜きです
-        n = 母音.length - 1
-        for i in 0..n
-          if 母音[i][:段] == nil
-            母音[i] = 母音[i].dup
-            母音[i][:段] = 子音[:段]
-          end
-        end
-      end
 
-      母音 =
+      母音配列 =
         case 母音
         when Array
           母音
         when Hash
-          母音位置正規化 母音[:左右], 母音[:段], 番号: 母音[:番号]
+          母音位置正規化 母音
         when :鍵盤
           鍵盤母音
         else
           raise '母音位置は配列，連想配列，シンボル（:鍵盤）で指定してください'
         end
 
-      if かな.length != 母音.length
+      if かな配列.length != 母音配列.length
         raise 'かなは母音と同じ文字数で指定してください'
+      end
+
+      ## 母音の段が省略されている場合，子音の段を設定する
+      n = 母音配列.length - 1
+      for i in 0..n
+        if 母音配列[i][:段] == nil
+          母音配列[i] = 母音配列[i].dup
+          母音配列[i][:段] = 子音[:段]
+        end
       end
 
       子音R = 子音   ? @鍵盤[子音[:左右]][子音[:段]][子音[:番号]] : ''
@@ -191,15 +183,15 @@ class Generator
         拗音R = 拗音化 ? 省略R(位置: 拗音化, 段: 子音[:段]) : ''
         促音R = 促音化 ? 省略R(位置: 促音化, 段: 子音[:段]) : ''
       else
-        拗音R = 拗音化 ? 省略R(位置: 拗音化, 段: nil) : ''
-        促音R = 促音化 ? 省略R(位置: 促音化, 段: nil) : ''
+        拗音R = 拗音化 ? 省略R(位置: 拗音化) : ''
+        促音R = 促音化 ? 省略R(位置: 促音化) : ''
       end
 
       促音  = 促音化 ? 'っ' : ''
       撥音  = 撥音化 ? 'ん' : ''
 
       結果 = []
-      [かな, 母音].transpose.each do | (かなI, 母音I) |
+      [かな配列, 母音配列].transpose.each do | (かなI, 母音I) |
         母音R = @鍵盤[母音I[:左右]][母音I[:段]][母音I[:番号]]
         結果 << 変換表作成("#{子音R}#{拗音R}#{促音R}#{母音R}", "#{かなI}#{促音}#{撥音}")
       end
@@ -215,30 +207,60 @@ class Generator
   end
 
   # 省略して位置を指定された場合です
+  #
+  # @param 位置 [Hash]
+  # @param
   def 省略R(位置: nil, 段: nil)
     case
     when 位置 == {} # 変化鍵の省略（母音の位置で判断）
       ''
     when !位置[:段] # 位置の省略
-      段 != nil or raise '位置の段が省略されているため段を指定してください'
+      if 段 == nil
+        raise '位置の段が省略されているため段を指定してください'
+      end
       @鍵盤[位置[:左右]][段][位置[:番号]]
     else
       @鍵盤[位置[:左右]][位置[:段]][位置[:番号]]
     end
   end
 
-  # TODO: Hashを渡したほうがスマートか？
-  def 母音位置正規化(左右, 段, 番号: nil)
+  # 指定に基づき，「かな」の配列を得る操作
+  #
+  # @param かな [Array, String, Symbol] かな（'かきくけこ'，['きゃ', 'きゅ', 'きょ'], :さ行）など．
+  # @return [Array] かなの配列
+  def かな配列化(かな)
+    case かな
+    when Array
+      かな
+    when String
+      かな.split("")
+    when Symbol
+      @五十音.表[かな]
+    else
+      raise 'かなはシンボル，文字列，配列で指定してください'
+    end
+  end
+
+  # 母音位置にて番号が省略されている場合，登録されている母音順に従い位置の配列に正規化する．
+  # 番号を省略する場合は，必ず{#母音順}を設定しておくこと．
+  #
+  # @return [Array] 母音の配列
+  def 母音位置正規化(左右: nil, 段: nil, 番号: nil)
     case
     when !番号
-      @母音順 or raise '番号を省略する場合は母音順を設定してください．'
+      if !@母音順
+        raise '番号を省略する場合は母音順を設定してください．'
+      end
       結果 = []
       for 番号 in 0..4
         結果 << {左右: 左右, 段: 段, 番号: @母音順[番号]}
       end
       結果
     else
-      (0..4).include?(番号) or raise '番号は[0..4]で指定してください．'
+      if (0..4).include?(番号)
+      else
+        raise '番号は[0..4]で指定してください．'
+      end
       [{左右: 左右, 段: 段, 番号: 番号}]
     end
   end

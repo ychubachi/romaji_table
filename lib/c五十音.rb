@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
-# # hoge
-# [Class: YARD::CLI::Yardoc — Documentation for yard (0.8.7)](http://rubydoc.info/docs/yard/YARD/CLI/Yardoc)
-# [99式ローマ字](http://roomazi.org/99/details.html)
+=begin
+@markup markdown
+# hoge
+[Class: YARD::CLI::Yardoc — Documentation for yard (0.8.7)](http://rubydoc.info/docs/yard/YARD/CLI/Yardoc)
+[99式ローマ字](http://roomazi.org/99/details.html)
+=end
 class C五十音
   attr :表
 
