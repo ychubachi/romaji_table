@@ -226,7 +226,10 @@ class Generator
 
   # 指定に基づき，「かな」の配列を得る操作
   #
-  # @param かな [Array, String, Symbol] かな（'かきくけこ'，['きゃ', 'きゅ', 'きょ'], :さ行）など．
+  # @param かな [Array, String, Symbol]
+  #        かな（'かきくけこ'，['きゃ', 'きゅ', 'きょ'], :さ行）など．
+  #        配列の場合は，そのまま返す．
+  #        文字列の場合は，1文字ごとの配列にする．
   # @return [Array] かなの配列
   def かな配列化(かな)
     case かな
@@ -249,7 +252,7 @@ class Generator
     case
     when !番号
       if !@母音順
-        raise '番号を省略する場合は母音順を設定してください．'
+        raise '番号を省略する場合は母音順を設定してください'
       end
       結果 = []
       for 番号 in 0..4
@@ -259,7 +262,7 @@ class Generator
     else
       if (0..4).include?(番号)
       else
-        raise '番号は[0..4]で指定してください．'
+        raise '番号は[0..4]で指定してください'
       end
       [{左右: 左右, 段: 段, 番号: 番号}]
     end
