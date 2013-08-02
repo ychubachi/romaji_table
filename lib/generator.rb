@@ -99,15 +99,18 @@ class Generator
     結果
   end
 
-=begin
-
-=end
   # 子音と母音の位置を指定する．
   #
-  # @param かな [String, Array<String>, Symbol]  打鍵順序に対応づけるひらがなである．「かな」がStringのときは1文字毎に，Arrayの場合は要素毎に変換規則を生成する．またSynbolの場合，{C五十音#表}の行を表す．
-  # @param 母音 [Array, Hash] 母音の位置を指定するArrayもしくはHash．内部で配列に変換し，{#母音位置正規化}する．必ず「かな」と同じ長さになるようにすること．
-  # @param 子音 [Hash, Array] 子音の位置を指定するHash．位置を省略したArrayも使えるが，不要かもしれない．
+  # @param かな [String, Array<String>, Symbol]  打鍵順序に対応づけるひらがなである．
+  #   「かな」がStringのときは1文字毎に，Arrayの場合は要素毎に変換規則を生成する．
+  #   またSynbolの場合，{C五十音#表}の行を表す．
+  # @param 母音 [Array, Hash] 母音の位置を指定するArrayもしくはHash．
+  #   Hashの場合，内部で{#母音位置正規化}する．
+  #   また，省略した（nil）場合，鍵盤にある母音の位置になる．
+  #   いずれの場合も，必ず「かな」と同じ長さになるようにすること．
+  # @param 子音 [Hash] 子音の位置を指定するHash．
   # @return [Array] ローマ字変換列
+  # @todo 撥音化，拗音化の検査
   def 変換(かな,
            子音: nil, 母音: nil,
            拗音化: nil, 撥音化: nil, 促音化: nil,
