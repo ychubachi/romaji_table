@@ -140,13 +140,14 @@ class Generator
       母音配列 =
         case 母音
         when Array
-          母音
+          # [Making Deep Copies in Ruby](http://ruby.about.com/od/advancedruby/a/deepcopy.htm)
+          Marshal.load(Marshal.dump(母音))
         when Hash
-          母音位置正規化 母音
-        when :鍵盤
+          母音位置正規化(母音)
+        when nil
           鍵盤母音
         else
-          raise '母音位置は配列，連想配列，シンボル（:鍵盤）で指定してください'
+          raise '母音位置は配列，連想配列またはnilで指定してください'
         end
 
       if かな配列.length != 母音配列.length
@@ -157,7 +158,7 @@ class Generator
       n = 母音配列.length - 1
       for i in 0..n
         if 母音配列[i][:段] == nil
-          母音配列[i] = 母音配列[i].dup
+          母音配列[i] = 母音配列[i] # 上でDeep Copyしないと呼び元の変数を壊す
           母音配列[i][:段] = 子音[:段]
         end
       end
