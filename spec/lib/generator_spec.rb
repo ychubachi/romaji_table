@@ -227,7 +227,13 @@ end
 describe Generator, '#母音' do
   subject(:it){Generator.new}
 
-
+  it '母音の段を省略する' do
+    it.二重母音登録 ['うう', 'おう']
+    expect(it.変換 it.二重母音(:にゃ行), 子音: {左右: :右, 段: :中, 番号: 3}, 母音: [{左右: :右, 番号: 2}, {左右: :右, 番号: 4}]).
+      to eq [["nt", "にゅう"], ["ns", "にょう"]]
+    expect(it.変換 it.二重母音(:みゃ行), 子音: {左右: :右, 段: :下, 番号: 1}, 母音: [{左右: :右, 番号: 2}, {左右: :右, 番号: 4}]).
+      to eq [["mw", "みゅう"], ["mz", "みょう"]]
+  end
 end
 
 describe Generator, '#鍵盤母音' do
@@ -262,115 +268,168 @@ describe Generator, '#鍵盤登録' do
   end
 end
 
-describe Generator, '二重母音登録' do
-  subject(:it){Generator.new}
-
-  it '二重母音を登録する' do
-    expect(it.二重母音登録 ['あん', 'うい', 'うう', 'えい', 'おう']).to eq ["あん", "うい", "うう", "えい", "おう"]
-  end
-end
 
 describe Generator, '#二重母音' do
+
   subject(:it){Generator.new}
 
-  it '行を二重母音にする' do
-    expect{it.二重母音(it.あ行)}.to raise_error
-    it.二重母音登録 ['あん', 'うい', 'うう', 'えい', 'おう']
-    expect(it.二重母音(it.あ行)).to eq ['あん', 'うい', 'うう', 'えい', 'おう']
-    expect(it.二重母音(it.か行)).to eq ['かん', 'くい', 'くう', 'けい', 'こう']
-    expect(it.二重母音(it.しゃ行)).to eq ["しゃん", "しゅい", "しゅう", "しぇい", "しょう"]
-    it.二重母音登録 ['えあ', 'いう', 'うえ']
-    expect(it.二重母音(it.か行)).to eq ['けあ', 'きう', 'くえ']
-  end
+  ## ================================================================
+  ## Public Methods
+  ## ================================================================
+  context 'public' do
+    describe '#二母音登録' do
+      subject(:it){Generator.new}
 
-
-  it '二重母音の行をシンボルで指定する' do
-    it.二重母音登録 ['ああ', 'うい', 'うう', 'えい', 'おう']
-    expect(it.変換(it.二重母音(:か行), 子音: {左右: :右, 段: :上, 番号: 2}, 母音: {左右: :左, 段: :上})).
-      to eq [["c'", "かあ"], ["cy", "くい"], ["cp", "くう"], ["c.", "けい"], ["c,", "こう"]]
-  end
-end
-
-################################################################
-# DSL
-#
-
-# 標準出力の検査用
-def capture(stream)
-    begin
-        stream = stream.to_s
-        eval "$#{stream} = StringIO.new"
-        yield
-        result = eval("$#{stream}").string
-    ensure
-        eval "$#{stream} = #{stream.upcase}"
+      it '二重母音を登録する' do
+        expect(it.二重母音登録 ['あん', 'うい', 'うう', 'えい', 'おう']).to eq ["あん", "うい", "うう", "えい", "おう"]
+      end
     end
-    result
-end
 
-describe Generator, '#execute' do
-  it 'DSL' do
-    # 標準出力をキャプチャするため，デバッグ用のputsなどに注意
-    expect(capture(:stdout) {
-             Generator.execute <<-EOS
+    describe '#二重母音' do
+      it '行を二重母音にする' do
+        expect{it.二重母音(it.あ行)}.to raise_error '二重母音が登録されてません'
+        it.二重母音登録 ['あん', 'うい', 'うう', 'えい', 'おう']
+        expect(it.二重母音(it.あ行)).to eq ['あん', 'うい', 'うう', 'えい', 'おう']
+        expect(it.二重母音(it.か行)).to eq ['かん', 'くい', 'くう', 'けい', 'こう']
+        expect(it.二重母音(it.しゃ行)).to eq ["しゃん", "しゅい", "しゅう", "しぇい", "しょう"]
+        it.二重母音登録 ['えあ', 'いう', 'うえ']
+        expect(it.二重母音(it.か行)).to eq ['けあ', 'きう', 'くえ']
+      end
+
+      it '二重母音の行をシンボルで指定する' do
+        it.二重母音登録 ['ああ', 'うい', 'うう', 'えい', 'おう']
+        expect(it.変換(it.二重母音(:か行),
+                       子音: {左右: :右, 段: :上, 番号: 2}, 母音: {左右: :左, 段: :上})).
+          to eq [["c'", "かあ"], ["cy", "くい"], ["cp", "くう"], ["c.", "けい"], ["c,", "こう"]]
+      end
+    end
+  end
+
+  ## ================================================================
+  ## DSL（実行）
+  ## ================================================================
+  context 'DSL execute' do
+    describe '#execute' do
+      it 'DSL' do
+        # 標準出力をキャプチャするため，デバッグ用のputsなどに注意
+        expect(capture(:stdout) {
+                 Generator.execute <<-EOS
                変換 あ行, 母音: {左右: :左, 段: :中}
              EOS
-           }).to eq "a\tあ\ni\tい\nu\tう\ne\tえ\no\tお\n"
-  end
-end
-
-################################################################
-# Private methods
-#
-describe Generator, 'private' do
-  subject(:it) {Generator.new}
-
-  describe '#変換表作成' do
-    it '変換表が追加されたか？' do
-      expect(it.send(:変換表作成, 'a', 'あ')).to eq ["a", "あ"]
+               }).to eq "a\tあ\ni\tい\nu\tう\ne\tえ\no\tお\n"
+      end
     end
   end
 
-  describe '#省略R' do
-    it '鍵の位置を省略して指定します' do
-      expect(it.send(:省略R, 位置: {左右: :左, 段: :中, 番号: 0})).to eq 'a'
-      expect(it.send(:省略R, 位置: {左右: :左, 番号: 0}, 段: :中)).to eq 'a'
-      expect{it.send(:省略R, 位置: {左右: :左, 番号: 0})}.to raise_error
-      expect(it.send(:省略R, 位置: {})).to eq ''
-    end
-  end
 
-  describe '#母音位置正規化' do
-    it '番号を指定して母音を検査します' do
-      expect(it.send(:母音位置正規化, :左, :中, 番号: 0).length).to eq 1
-      expect(it.send(:母音位置正規化, :左, :中, 番号: 0)).to eq [{左右: :左, 段: :中, 番号: 0}]
-      expect{it.send(:母音位置正規化, :左, :中, 番号: -1)}.to raise_error
+  ## ================================================================
+  ## Private methods
+  ## ================================================================
+  context 'private' do
+    subject(:it) {Generator.new}
+
+    describe '#変換表作成' do
+      it '変換表が追加されたか？' do
+        expect(it.send(:変換表作成, 'a', 'あ')).to eq ["a", "あ"]
+      end
     end
 
-    it '母音を検査します' do
-      expect(it.send(:母音位置正規化, :左, :中).length).to eq 5
-      expect(it.send(:母音位置正規化, :左, :中)).
-        to eq [{左右: :左, 段: :中, 番号: 0},
-               {左右: :左, 段: :中, 番号: 4},
-               {左右: :左, 段: :中, 番号: 3},
-               {左右: :左, 段: :中, 番号: 2},
-               {左右: :左, 段: :中, 番号: 1}]
+    describe '#省略R' do
+      it '鍵の位置を省略して指定します' do
+        expect(it.send(:省略R, 位置: {左右: :左, 段: :中, 番号: 0})).to eq 'a'
+        expect(it.send(:省略R, 位置: {左右: :左, 番号: 0}, 段: :中)).to eq 'a'
+        expect{it.send(:省略R, 位置: {左右: :左, 番号: 0})}.to raise_error
+        expect(it.send(:省略R, 位置: {})).to eq ''
+      end
     end
 
-    it '母音順を設定して母音を検査します' do
-      it.母音順 = [4, 3, 2, 1, 0]
-      # todo 数もチェック
-      expect(it.send(:母音位置正規化, :左, :中)).
-        to eq [{左右: :左, 段: :中, 番号: 4},
-               {左右: :左, 段: :中, 番号: 3},
-               {左右: :左, 段: :中, 番号: 2},
-               {左右: :左, 段: :中, 番号: 1},
-               {左右: :左, 段: :中, 番号: 0}]
-      it.母音順 = nil
-      expect{it.母音位置正規化(左右: :左, 段: :中)}.to raise_error
+    describe '#かな配列化' do
+      it '「かな」に配列を渡すと，そのまま返す' do
+        r = it.send(:かな配列化, ['あ', 'いん'])
+        expect(r).to be_a Array
+        expect(r).to eq ["あ", "いん"]
+      end
+
+      it '「かな」に文字列を渡すと，1文字毎の配列を返す' do
+        r = it.send(:かな配列化, 'かき')
+        expect(r).to be_a Array
+        expect(r).to eq ["か", "き"]
+      end
+
+      it '「かな」にシンボルを渡すと，五十音表の行を返す' do
+        r = it.send(:かな配列化, :さ行)
+        expect(r).to be_a Array
+        expect(r).to eq ["さ", "し", "す", "せ", "そ"]
+      end
+
+      it '「かな」にシンボルを渡すと，五十音表の行に無ければ例外発生' do
+        expect{it.send(:かな配列化, :ん行)}.to raise_error '「ん行」は行として登録されていません'
+      end
+    end
+
+    describe '#母音位置正規化' do
+      it '省略のない母音を渡すと，そのまま返す' do
+        r = it.send(:母音位置正規化, 左右: :左, 段: :中, 番号: 0)
+        expect(r).to be_a Array
+        expect(r.length).to eq 1
+        expect(r).to eq [{左右: :左, 段: :中, 番号: 0}]
+      end
+
+      it '番号を省略した母音の位置を渡すと，位置配列を返す' do
+        r = it.send(:母音位置正規化, 左右: :左, 段: :中)
+        expect(r).to be_a Array
+        expect(r.length).to eq 5
+        expect(r).
+          to eq [{左右: :左, 段: :中, 番号: 0},
+                 {左右: :左, 段: :中, 番号: 4},
+                 {左右: :左, 段: :中, 番号: 3},
+                 {左右: :左, 段: :中, 番号: 2},
+                 {左右: :左, 段: :中, 番号: 1}]
+      end
+
+      it '母音の番号が範囲外ならば，例外発生' do
+        expect{it.send(:母音位置正規化, 左右: :左, 段: :中, 番号: -1)}.
+          to raise_error '番号は[0..4]で指定してください'
+        expect{it.send(:母音位置正規化, 左右: :左, 段: :中, 番号: 5)}.
+          to raise_error '番号は[0..4]で指定してください'
+      end
+
+      it '母音順を設定しておくと，それに従った位置配列を返す' do
+        it.母音順 = [4, 2, 0, 1, 3]
+        r = it.send(:母音位置正規化, 左右: :左, 段: :中)
+        expect(r).to be_a Array
+        expect(r.length).to eq 5
+        expect(r).
+          to eq [{左右: :左, 段: :中, 番号: 4},
+                 {左右: :左, 段: :中, 番号: 2},
+                 {左右: :左, 段: :中, 番号: 0},
+                 {左右: :左, 段: :中, 番号: 1},
+                 {左右: :左, 段: :中, 番号: 3}]
+      end
+
+      it '母音順が未定義ならば，例外発生' do
+        it.母音順 = nil
+        expect{it.send(:母音位置正規化, 左右: :左, 段: :中)}.
+          to raise_error('番号を省略する場合は母音順を設定してください')
+      end
     end
   end
 end
 
 # Coverage
 # file:///home/yc/git/romantable_generator/coverage/index.html
+
+# ================================================================
+# 標準出力の検査用
+# ================================================================
+def capture(stream)
+  begin
+    stream = stream.to_s
+    eval "$#{stream} = StringIO.new"
+    yield
+    result = eval("$#{stream}").string
+  ensure
+    eval "$#{stream} = #{stream.upcase}"
+  end
+  result
+end
