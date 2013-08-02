@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 
-=begin
-@markup markdown
-# hoge
-[Class: YARD::CLI::Yardoc — Documentation for yard (0.8.7)](http://rubydoc.info/docs/yard/YARD/CLI/Yardoc)
-[99式ローマ字](http://roomazi.org/99/details.html)
-=end
+# [Class: YARD::CLI::Yardoc — Documentation for yard (0.8.7)](http://rubydoc.info/docs/yard/YARD/CLI/Yardoc)
+# [99式ローマ字](http://roomazi.org/99/details.html)
 class C五十音
   attr :表
 
@@ -85,6 +81,9 @@ class C五十音
       しゃ行H:  ['しゃ', 'しぃ', 'し',   'しぇ', 'しょ'], # ヘボン式のshiは「し」
       ちゃ行H:  ['ちゃ', 'ち',   'ちゅ', 'ちぇ', 'ちょ'], # ヘボン式のchiは「ち」
       じゃ行H:  ['じゃ', 'じ',   'じゅ', 'じぇ', 'じょ'], # ヘボン式のji は「じ」
+    }
+    @表.default_proc = Proc.new {
+      |hash, key| raise "「#{key}」は行として登録されていません"
     }
   end
 end

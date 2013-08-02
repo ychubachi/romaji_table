@@ -3,13 +3,20 @@
 require 'c五十音'
 
 describe C五十音 do
+  subject(:it) {C五十音.new}
+
   describe '#new' do
     it 'C五十音を生成する' do
       expect(C五十音.new).to be_an_instance_of C五十音
     end
   end
 
-  subject(:it) {C五十音.new}
+  describe '#表' do
+    it '表を検査する' do
+      expect(it.表[:あ行]).to eq ["あ", "い", "う", "え", "お"]
+      expect{it.表[:ん行]}.to raise_error("「ん行」は行として登録されていません")
+    end
+  end
 
   describe '#行' do
     it '母音を与え，かなを取り出す' do
