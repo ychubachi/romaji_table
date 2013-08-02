@@ -17,7 +17,7 @@ describe C鍵盤 do
       expect(it[:左][:中]).to eq 'aoeui'
     end
   end
-  
+
   context '#登録' do
     it '鍵盤を登録したら，鍵盤はその内容を返す' do
       expect(it.鍵盤).to be_a_kind_of Hash
@@ -39,5 +39,3 @@ describe C鍵盤 do
     end
   end
 end
-
-
