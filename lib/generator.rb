@@ -31,14 +31,6 @@ class Generator
   Dvorak = C鍵盤::Dvorak
 
   # DSL実行
-  def self.execute(contents)
-    g = Generator.new
-    g.instance_eval(contents)
-    g.変換表.each do |(k, v)|
-      puts "#{k}\t#{v}"
-    end
-  end
-
   # DSL初期化
   def initialize
     # 変換表の生成結果を格納する配列
@@ -252,6 +244,13 @@ class Generator
         raise '番号は[0..4]で指定してください'
       end
       [{左右: 左右, 段: 段, 番号: 番号}]
+    end
+  end
+  def self.execute(contents)
+    g = Generator.new
+    g.instance_eval(contents)
+    g.変換表.each do |(k, v)|
+      puts "#{k}\t#{v}"
     end
   end
 end
