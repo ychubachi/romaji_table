@@ -124,35 +124,18 @@ class Generator
       end
       [変換表作成(ローマ字, かな)]
     else
-      かな配列 = かな配列化 かな
+      かな配列 = かな配列化(かな)
 
-      子音 =
-        case 子音
-        when Hash
-          子音
-        when Array
-          {左右: 子音[0], 段: 子音[1], 番号: 子音[2]}
-        when nil
-          nil
-        else
-          raise '子音は連想配列または配列で指定してください'
-        end
-
-      拗音化 =
-        case 拗音化
-        when Hash
-          if 拗音化 != {} && 拗音化[:番号] == nil
-             raise '拗音化の番号は省略できません'
-          end
-          拗音化
-        when Array
-          {左右: 拗音化[0], 段: 拗音化[1], 番号: 拗音化[2]}
-        when nil
-          nil
-        else
-          raise '拗音は連想配列または配列で指定してください'
-        end
-
+      case
+      when 子音 && 子音.is_a?(Hash) == false
+        raise '子音は連想配列またはnilで指定してください'
+      when 拗音化 && 拗音化.is_a?(Hash) == false
+        raise '拗音は連想配列またはnilで指定してください'
+      when 撥音化 && 撥音化.is_a?(Hash) == false
+        raise '撥音は連想配列またはnilで指定してください'
+      when 促音化 && 促音化.is_a?(Hash) == false
+        raise '促音は連想配列またはnilで指定してください'
+      end
 
       母音配列 =
         case 母音
