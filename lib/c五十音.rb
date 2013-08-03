@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
-# [Class: YARD::CLI::Yardoc — Documentation for yard (0.8.7)](http://rubydoc.info/docs/yard/YARD/CLI/Yardoc)
-# [99式ローマ字](http://roomazi.org/99/details.html)
+# Class: YARD::CLI::Yardoc — Documentation for yard (0.8.7)
+# - http://rubydoc.info/docs/yard/YARD/CLI/Yardoc
+# 99式ローマ字
+# - http://roomazi.org/99/details.html)
 class C五十音
   attr :表
-  attr :直音
+  attr :直音行
 
   def initialize
     @表 = {
@@ -83,16 +85,17 @@ class C五十音
       ちゃ行H:  ['ちゃ', 'ち',   'ちゅ', 'ちぇ', 'ちょ'], # ヘボン式のchiは「ち」
       じゃ行H:  ['じゃ', 'じ',   'じゅ', 'じぇ', 'じょ'], # ヘボン式のji は「じ」
     }
-
     @表.default_proc = Proc.new {
       |hash, key| raise "「#{key}」は行として登録されていません"
     }
+    @表.freeze
 
-    @直音 = [:あ行,
-             :か行, :さ行, :た行, :な行,
-             :は行, :ま行, :や行, :ら行, :わ行,
-             :が行, :ざ行, :だ行,
-             :ば行, :ぱ行]
+    @直音行 = [:あ行,
+               :か行, :さ行, :た行, :な行,
+               :は行, :ま行, :や行, :ら行, :わ行,
+               :が行, :ざ行, :だ行,
+               :ば行, :ぱ行]
+    @直音行.freeze
   end
 
   def 列(列)
@@ -102,26 +105,31 @@ class C五十音
     end
 
     結果 = []
-    @直音.each do |行|
+    @直音行.each do |行|
       結果 << @表[行][列]
     end
     結果
   end
 
-  # 列と行で指定された拗音を返す．
-  #
-  def 拗音(列, 行)
-    if ![:ゃ, :ぁ].include?(行)
-      raise '行には「:ゃ」または「:ぁ」を指定してください'
+  def かな(行, 列)
+    ※行 = @表[行]
+
+    ※列 = @表[:あ行].index(列.to_s[0])
+    if ※列 == nil
+      raise "「#{列}」はあ行の文字ではありません"
     end
 
-   対象 = self.列(列)
-    対象.delete_if{|x| @表[:あ行].include?(x)}
-    対象.delete_if{|x| @表[:わ行].include?(x)}
-    結果 = []
-    対象.each do |かな|
-      結果 << "#{かな}#{行}行".to_sym
+    ※行[※列]
+  end
+
+  # 列と行，拗音行で指定された拗音の行を返す．
+  #
+  def 拗音(行, 列, 拗音行)
+    if ![:ゃ行, :ぁ行].include?(拗音行)
+      raise '拗音行には「ゃ行」または「ぁ行」を指定してください'
     end
-    結果
+
+    かな = "#{かな(行, 列)}#{拗音行.to_s[0]}行"
+    かな.to_sym
   end
 end

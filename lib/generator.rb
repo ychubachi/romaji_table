@@ -26,6 +26,7 @@ class Generator
   attr :母音順, true
   attr :鍵盤母音
   attr :変換表
+  attr :五十音
 
   Qwerty = C鍵盤::Qwerty
   Dvorak = C鍵盤::Dvorak
@@ -45,14 +46,14 @@ class Generator
 
     @五十音 = C五十音.new
 
-    # が行(), さ行() ... 操作を追加
-    @五十音.表.each_key do |行|
-      eval <<-RUBY
-            def #{行}
-              @五十音.表[:#{行}]
-            end
-          RUBY
-    end
+    # # が行(), さ行() ... 操作を追加
+    # @五十音.表.each_key do |行|
+    #   eval <<-RUBY
+    #         def #{行}
+    #           @五十音.表[:#{行}]
+    #         end
+    #       RUBY
+    # end
 
     @二重母音 = nil
   end
@@ -65,6 +66,16 @@ class Generator
   # DSL
   def 鍵盤母音
     @鍵盤.母音
+  end
+
+  # 五十音から直音（あ，ざ，ぱなど）を返す．
+  # DSLで変更可能にするため，dupをしている．
+  def 直音行
+    @五十音.直音行.dup
+  end
+
+  def 拗音(行, 列, 拗音行)
+    @五十音.拗音(行, 列, 拗音行)
   end
 
   #DSL
@@ -132,7 +143,8 @@ class Generator
       母音配列 =
         case 母音
         when Array
-          # [Making Deep Copies in Ruby](http://ruby.about.com/od/advancedruby/a/deepcopy.htm)
+          # Making Deep Copies in Ruby
+          # - http://ruby.about.com/od/advancedruby/a/deepcopy.htm)
           Marshal.load(Marshal.dump(母音))
         when Hash
           母音位置正規化(母音)
@@ -248,7 +260,7 @@ class Generator
   end
   def self.execute(contents)
     g = Generator.new
-    g.instance_eval(contents)
+    g.instance_eval(contents, 'JLOD.rb', 9)
     g.変換表.each do |(k, v)|
       puts "#{k}\t#{v}"
     end

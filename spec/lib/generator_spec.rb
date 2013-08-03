@@ -191,23 +191,6 @@ describe Generator, '#initialize' do
   end
 end
 
-describe Generator, '#行' do
-  subject(:it){Generator.new}
-
-  it '行操作を検査します' do
-    expect(it.あ行.join).to eq 'あいうえお'
-    expect(it.か行.join).to eq 'かきくけこ'
-    expect(it.さ行.join).to eq 'さしすせそ'
-    expect(it.た行.join).to eq 'たちつてと'
-    expect(it.な行.join).to eq 'なにぬねの'
-    expect(it.は行.join).to eq 'はひふへほ'
-    expect(it.ま行.join).to eq 'まみむめも'
-    expect(it.や行.join).to eq 'やいゆえよ'
-    expect(it.ら行.join).to eq 'らりるれろ'
-    expect(it.わ行.join).to eq 'わゐうゑを'
-    # TODO: きゃきぃきゅきぇきょなど
-  end
-end
 
 describe Generator, '#母音' do
   subject(:it){Generator.new}
@@ -276,13 +259,14 @@ describe Generator, '#二重母音' do
 
     describe '#二重母音' do
       it '行を二重母音にする' do
-        expect{it.二重母音(it.あ行)}.to raise_error '二重母音が登録されてません'
+        expect{it.二重母音(it.五十音.表[:あ行])}.to raise_error '二重母音が登録されてません'
         it.二重母音登録 ['あん', 'うい', 'うう', 'えい', 'おう']
-        expect(it.二重母音(it.あ行)).to eq ['あん', 'うい', 'うう', 'えい', 'おう']
-        expect(it.二重母音(it.か行)).to eq ['かん', 'くい', 'くう', 'けい', 'こう']
-        expect(it.二重母音(it.しゃ行)).to eq ["しゃん", "しゅい", "しゅう", "しぇい", "しょう"]
+        expect(it.二重母音(it.五十音.表[:あ行])).to eq ['あん', 'うい', 'うう', 'えい', 'おう']
+        expect(it.二重母音(it.五十音.表[:か行])).to eq ['かん', 'くい', 'くう', 'けい', 'こう']
+        expect(it.二重母音(it.五十音.表[:しゃ行])).
+          to eq ["しゃん", "しゅい", "しゅう", "しぇい", "しょう"]
         it.二重母音登録 ['えあ', 'いう', 'うえ']
-        expect(it.二重母音(it.か行)).to eq ['けあ', 'きう', 'くえ']
+        expect(it.二重母音(it.五十音.表[:か行])).to eq ['けあ', 'きう', 'くえ']
       end
 
       it '二重母音の行をシンボルで指定する' do
@@ -290,6 +274,34 @@ describe Generator, '#二重母音' do
         expect(it.変換(it.二重母音(:か行),
                        子音: {左右: :右, 段: :上, 番号: 2}, 母音: {左右: :左, 段: :上})).
           to eq [["c'", "かあ"], ["cy", "くい"], ["cp", "くう"], ["c.", "けい"], ["c,", "こう"]]
+      end
+    end
+
+    describe '#直音行' do
+      it '直音行を返す' do
+        expect(it.直音行).to eq [:あ行,
+                                 :か行, :さ行, :た行, :な行,
+                                 :は行, :ま行, :や行, :ら行, :わ行,
+                                 :が行, :ざ行, :だ行,
+                                 :ば行, :ぱ行]
+      end
+    end
+    describe '#拗音' do
+      it '行と列，拗音行(:ゃ)を与えると，拗音を返す' do
+        expect(it.拗音(:か行, :い列, :ゃ行)).to eq :きゃ行
+      end
+
+      it '行と列，拗音行(:ぁ)を与えると，拗音を返す' do
+        expect(it.拗音(:は行, :う列, :ぁ行)).to eq :ふぁ行
+      end
+
+      it '対象としない行と列を与えると，例外発生' do
+        expect{it.拗音(:ん行, :な列, :ゃ行)}.
+          to raise_error('「ん行」は行として登録されていません')
+        expect{it.拗音(:か行, :な列, :ゃ行)}.
+          to raise_error('「な列」はあ行の文字ではありません')
+        expect{it.拗音(:か行, :い, :ん)}.
+          to raise_error('拗音行には「ゃ行」または「ぁ行」を指定してください')
       end
     end
   end
@@ -303,7 +315,7 @@ describe Generator, '#二重母音' do
         # 標準出力をキャプチャするため，デバッグ用のputsなどに注意
         expect(capture(:stdout) {
                  Generator.execute <<-EOS
-               変換 あ行, 母音: {左右: :左, 段: :中}
+               変換 五十音.表[:あ行], 母音: {左右: :左, 段: :中}
              EOS
                }).to eq "a\tあ\ni\tい\nu\tう\ne\tえ\no\tお\n"
       end
