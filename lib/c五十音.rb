@@ -4,6 +4,9 @@
 # - http://rubydoc.info/docs/yard/YARD/CLI/Yardoc
 # 99式ローマ字
 # - http://roomazi.org/99/details.html)
+
+# 五十音を抽象化したクラス．
+
 class C五十音
   attr :表
   attr :直音行
