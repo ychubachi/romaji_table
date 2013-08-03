@@ -4,6 +4,7 @@
 # [99式ローマ字](http://roomazi.org/99/details.html)
 class C五十音
   attr :表
+  attr :直音
 
   def initialize
     @表 = {
@@ -82,8 +83,45 @@ class C五十音
       ちゃ行H:  ['ちゃ', 'ち',   'ちゅ', 'ちぇ', 'ちょ'], # ヘボン式のchiは「ち」
       じゃ行H:  ['じゃ', 'じ',   'じゅ', 'じぇ', 'じょ'], # ヘボン式のji は「じ」
     }
+
     @表.default_proc = Proc.new {
       |hash, key| raise "「#{key}」は行として登録されていません"
     }
+
+    @直音 = [:あ行,
+             :か行, :さ行, :た行, :な行,
+             :は行, :ま行, :や行, :ら行, :わ行,
+             :が行, :ざ行, :だ行,
+             :ば行, :ぱ行]
+  end
+
+  def 列(列)
+    列 = @表[:あ行].index(列.to_s)
+    if 列 == nil
+      raise '列にはあ行の文字を指定してください'
+    end
+
+    結果 = []
+    @直音.each do |行|
+      結果 << @表[行][列]
+    end
+    結果
+  end
+
+  # 列と行で指定された拗音を返す．
+  #
+  def 拗音(列, 行)
+    if ![:ゃ, :ぁ].include?(行)
+      raise '行には「:ゃ」または「:ぁ」を指定してください'
+    end
+
+   対象 = self.列(列)
+    対象.delete_if{|x| @表[:あ行].include?(x)}
+    対象.delete_if{|x| @表[:わ行].include?(x)}
+    結果 = []
+    対象.each do |かな|
+      結果 << "#{かな}#{行}行".to_sym
+    end
+    結果
   end
 end

@@ -5,15 +5,18 @@ require 'c五十音'
 describe C五十音 do
   subject(:it) {C五十音.new}
 
-  describe '#new' do
-    it 'C五十音を生成する' do
+  describe '#initialize' do
+    it '五十音を生成する' do
       expect(C五十音.new).to be_an_instance_of C五十音
     end
   end
 
   describe '#表' do
-    it '表を検査する' do
+    it '行を与えると，その行のかなを返す' do
       expect(it.表[:あ行]).to eq ["あ", "い", "う", "え", "お"]
+    end
+
+    it '表にない文字を与えると，例外発生' do
       expect{it.表[:ん行]}.to raise_error("「ん行」は行として登録されていません")
     end
   end
@@ -35,15 +38,45 @@ describe C五十音 do
   end
 
   describe '#列' do
-    it '五十音の列を与えると，その列を返す' do
-      expect(it.列(:う)).to eq 'うくすつぬふむゆるうぐずづぶぷ'
+    it '列にあ行の文字を与えると，その列を返す' do
+      expect(it.列(:う)).to eq ["う", "く", "す", "つ", "ぬ",
+                                "ふ", "む", "ゆ", "る", "う",
+                                "ぐ", "ず", "づ", "ぶ", "ぷ"]
+    end
+
+    it '列にあ行にない文字を与えると，例外発生' do
+      expect{it.列(:し)}.to raise_error('列にはあ行の文字を指定してください')
+    end
+  end
+
+  describe '#直音' do
+    it '直音を返す' do
+      expect(it.直音).to eq [:あ行,
+                             :か行, :さ行, :た行, :な行,
+                             :は行, :ま行, :や行, :ら行, :わ行,
+                             :が行, :ざ行, :だ行,
+                             :ば行, :ぱ行]
     end
   end
 
   describe '#拗音' do
-    it '行と列から，拗音を返す' do
-      expect(it.拗音(:ぢ, :や)).to eq ['ぢゃ', 'ぢぃ', 'ぢゅ', 'ぢぇ', 'ぢょ']
-      expect(it.拗音(:う, :わ)).to eq ['うぁ', 'うぃ', 'う',   'うぇ', 'うぉ']
+    it '行と列(:ゃ)を与えると，妥当な拗音を返す' do
+      expect(it.拗音(:い, :ゃ)).to eq [:きゃ行, :しゃ行, :ちゃ行, :にゃ行,
+                                       :ひゃ行, :みゃ行, :りゃ行,
+                                       :ぎゃ行, :じゃ行, :ぢゃ行, :びゃ行,
+                                       :ぴゃ行]
+    end
+
+    it '行と列(:ぁ)を与えると，妥当な拗音を返す' do
+      expect(it.拗音(:い, :ぁ)).to eq [:きぁ行, :しぁ行, :ちぁ行, :にぁ行,
+                                       :ひぁ行, :みぁ行, :りぁ行,
+                                       :ぎぁ行, :じぁ行, :ぢぁ行, :びぁ行,
+                                       :ぴぁ行]
+    end
+
+    it '対象としない行と列を与えると，例外発生' do
+      expect{it.拗音(:な, :ゃ)}.to raise_error('列にはあ行の文字を指定してください')
+      expect{it.拗音(:い, :ん)}.to raise_error('行には「:ゃ」または「:ぁ」を指定してください')
     end
   end
 end
