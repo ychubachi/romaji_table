@@ -5,7 +5,7 @@
 # 99式ローマ字
 # - http://roomazi.org/99/details.html)
 
-# 五十音を抽象化したクラス．
+# 五十音を抽象化したクラスx．
 
 class C五十音
   attr :表
