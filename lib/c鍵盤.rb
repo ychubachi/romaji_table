@@ -3,7 +3,7 @@
 class C鍵盤
   attr :鍵盤
   attr :母音
-  
+
   # 定数
   Dvorak = {
            左: { 上: '\',.py', 中: 'aoeui', 下: ';qjkx' },
@@ -14,7 +14,7 @@ class C鍵盤
               左: { 上: 'qwert', 中: 'asdfg', 下: 'zxcvb'},
               右: { 上: 'yuiop', 中: 'hjkl;', 下: 'nm,./'}
             }
-  
+
   def initialize
     登録(Dvorak)
   end
