@@ -6,21 +6,7 @@ require_relative 'c鍵盤'
 require_relative 'c五十音'
 
 =begin
-# ローマ字変換表生成器
-
-# ほげ
-位置とは，連想配列による鍵盤の座標表現のことである．
-
- hoge
-
-```ruby
- a = a + 1
- if hoge
-   p 'baka'
- end
-```
-
-do_this_and_do_that_and_another_thing
+ローマ字変換表生成器
 =end
 class Generator
   attr :母音順, true
