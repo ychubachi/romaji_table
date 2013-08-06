@@ -33,7 +33,7 @@ describe C五十音 do
     end
   end
 
-  describe '#直音' do
+  describe '#直音行' do
     it '直音を返す' do
       expect(it.直音行).to eq [:あ行,
                                :か行, :さ行, :た行, :な行,
@@ -46,9 +46,6 @@ describe C五十音 do
   describe '#拗音' do
     it '行と列，拗音行(:ゃ)を与えると，拗音を返す' do
       expect(it.拗音(:か行, :い列, :ゃ行)).to eq :きゃ行
-    end
-
-    it '行と列，拗音行(:ぁ)を与えると，拗音を返す' do
       expect(it.拗音(:は行, :う列, :ぁ行)).to eq :ふぁ行
     end
 
