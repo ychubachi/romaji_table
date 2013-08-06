@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.1415926-p3.4-110825-2.6 (utf8.euc) (TeX Live 2013) (format=platex 2013.8.6)  6 AUG 2013 19:55
+This is e-pTeX, Version 3.1415926-p3.4-110825-2.6 (utf8.euc) (TeX Live 2013) (format=platex 2013.8.6)  6 AUG 2013 20:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -182,90 +182,43 @@ LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <11.82813> not available
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <11.82813> not available
 (Font)              Font shape `JY1/gt/m/n' tried instead on input line 70.
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <9.24873> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 97.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 76.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <9.24873> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 97.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 76.
  (I search kanjifont definition file: . . ) (I search font definition file: .
 . . . . . . )
-LaTeX Font Info:    Try loading font information for OMS+txsy on input line 97.
+LaTeX Font Info:    Try loading font information for OMS+txsy on input line 76.
 
  (/usr/local/texlive/2013/texmf-dist/tex/latex/txfonts/omstxsy.fd
 File: omstxsy.fd 2000/12/15 v3.1
 )
-LaTeX Font Info:    Try loading font information for OT1+txsy on input line 97.
+LaTeX Font Info:    Try loading font information for OT1+txsy on input line 76.
 
-LaTeX Font Info:    No file OT1txsy.fd. on input line 97.
+LaTeX Font Info:    No file OT1txsy.fd. on input line 76.
 
 LaTeX Font Warning: Font shape `OT1/txsy/m/n' undefined
-(Font)              using `OT1/cmr/m/n' instead on input line 97.
+(Font)              using `OT1/cmr/m/n' instead on input line 76.
 
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 97.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 76.
 (/usr/local/texlive/2013/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 ) [1
 
 
+
 ]
-LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <9.61035> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 100.
-LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <9.61035> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 100.
-
-Overfull \hbox (20.41833pt too wide) in paragraph at lines 136--137
-[]\OT1/cmtt/m/n/8.8711 https://www.ipsj.or.jp/prms/author_pre_submit.do 
- []
-
-
-Overfull \hbox (1.7893pt too wide) in paragraph at lines 142--144
-[]\OT1/cmtt/m/n/8.8711 http://www.ipsj.or.jp/journal/submit/manual/
- []
-
-LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <6.7272> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 164.
-LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <6.7272> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 164.
-[2] [3] [4]
-LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <8.13184> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 464.
-LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <8.13184> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 464.
-LaTeX Font Info:    Font shape `JY1/mc/m/n' will be
-(Font)              scaled to size 9.60999pt on input line 520.
- [5] [6]
-LaTeX Font Info:    Font shape `JT1/mc/m/it' in size <8.8711> not available
-(Font)              Font shape `JT1/mc/m/n' tried instead on input line 808.
-LaTeX Font Info:    Font shape `JY1/mc/m/it' in size <8.8711> not available
-(Font)              Font shape `JY1/mc/m/n' tried instead on input line 808.
- [7]
-Underfull \hbox (badness 7256) in paragraph at lines 879--882
-[]\JY1/mc/m/n/9.61035 また英文論文作成の際には \OT1/cmtt/m/n/9.61035 english \J
-Y1/mc/m/n/9.61035 をオ
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 879--882
-\JY1/mc/m/n/9.61035 プシ ョンに追加すればよい ． したが って ，
- []
-
-[8]
-LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <11.08887> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 1035.
-LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <11.08887> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 1035.
- [9
-
-] (./jsample.aux)
+(./jsample.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 1682 strings out of 494004
- 23372 string characters out of 6154419
- 84731 words of memory out of 5000000
- 5146 multiletter control sequences out of 15000+600000
- 54701 words of font info for 244 fonts, out of 8000000 for 9000
+ 1610 strings out of 494004
+ 22387 string characters out of 6154419
+ 77731 words of memory out of 5000000
+ 5083 multiletter control sequences out of 15000+600000
+ 49606 words of font info for 216 fonts, out of 8000000 for 9000
  745 hyphenation exceptions out of 8191
- 36i,11n,28p,235b,424s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,10n,22p,235b,424s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on jsample.dvi (9 pages, 67184 bytes).
+Output written on jsample.dvi (1 page, 4984 bytes).
