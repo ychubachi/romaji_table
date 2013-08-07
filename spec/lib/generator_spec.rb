@@ -152,7 +152,6 @@ describe Generator do
         s.変換(:か行, 中間鍵: :ようおん)
       }.to raise_error '中間鍵は連想配列で指定，または，省略してください'
     end
-
   end
 
   describe '#母音' do
@@ -222,6 +221,13 @@ describe Generator do
       s.二重母音登録 ['ああ', 'うい', 'うう', 'えい', 'おう']
       r = s.変換(s.二重母音(:か行), 開始鍵: {左右: :右, 段: :上, 番号: 2}, 確定鍵: {左右: :左, 段: :上})
       expect(r).to eq [["c'", "かあ"], ["cy", "くい"], ["cp", "くう"], ["c.", "けい"], ["c,", "こう"]]
+    end
+
+    it '二重母音の1文字目があ行の文字でなければ，例外発生' do
+      s.二重母音登録 ['かか', 'きき', 'くく']
+      expect{
+        s.変換(s.二重母音(:か行), 開始鍵: {左右: :右, 段: :上, 番号: 2}, 確定鍵: {左右: :左, 段: :上})
+      }.to raise_error '「か」はあ行の文字ではありません'
     end
   end
 
@@ -306,7 +312,6 @@ describe Generator do
     subject(:s) {Generator.new}
 
     it '省略のない確定鍵を渡すと，そのまま返す' do
-      pending
       r = s.send(:確定鍵正規化, 左右: :左, 段: :中, 番号: 0)
       expect(r).to be_a Array
       expect(r.length).to eq 1
@@ -314,7 +319,6 @@ describe Generator do
     end
 
     it '番号を省略した確定鍵の位置を渡すと，位置配列を返す' do
-      pending
       r = s.send(:確定鍵正規化, 左右: :左, 段: :中)
       expect(r).to be_a Array
       expect(r.length).to eq 5
@@ -326,16 +330,7 @@ describe Generator do
                {左右: :左, 段: :中, 番号: 1}]
     end
 
-    it '確定鍵の番号が範囲外ならば，例外発生' do
-      pending
-      expect{s.send(:確定鍵正規化, 左右: :左, 段: :中, 番号: -1)}.
-        to raise_error '番号は[0..4]で指定してください'
-      expect{s.send(:確定鍵正規化, 左右: :左, 段: :中, 番号: 5)}.
-        to raise_error '番号は[0..4]で指定してください'
-    end
-
     it '母音順を設定しておくと，それに従った位置配列を返す' do
-      pending
       # todo: 母音順 -> 鍵盤母音順
       s.母音順 = [4, 2, 0, 1, 3]
       r = s.send(:確定鍵正規化, 左右: :左, 段: :中)
@@ -350,10 +345,9 @@ describe Generator do
     end
 
     it '母音順が未定義ならば，例外発生' do
-      pending
       s.母音順 = nil
       expect{s.send(:確定鍵正規化, 左右: :左, 段: :中)}.
-        to raise_error '番号を省略する場合は母音順を設定してください'
+        to raise_error '確定鍵の番号を省略する場合は母音順を設定してください'
     end
   end
 end

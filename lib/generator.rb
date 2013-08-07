@@ -19,31 +19,15 @@ class Generator
 
   C省略 = nil
 
-  # DSL実行
-  # DSL初期化
   def initialize
-    # 変換表の生成結果を格納する配列
     @変換表 = []
-
-    # キーボード配列の表
     @鍵盤 = C鍵盤.new
+    @五十音 = C五十音.new
+    @二重母音 = nil
 
     # 01234    04321
     # aiueo -> aoeui
     self.母音順 = [0, 4, 3, 2, 1]
-
-    @五十音 = C五十音.new
-
-    # # が行(), さ行() ... 操作を追加
-    # @五十音.表.each_key do |行|
-    #   eval <<-RUBY
-    #         def #{行}
-    #           @五十音.表[:#{行}]
-    #         end
-    #       RUBY
-    # end
-
-    @二重母音 = nil
   end
 
   # DSL
@@ -199,17 +183,9 @@ class Generator
   # @return [Array] 母音の配列
   def 確定鍵正規化(確定鍵)
     case 確定鍵
-    when Array
-      # Making Deep Copies in Ruby
-      # - http://ruby.about.com/od/advancedruby/a/deepcopy.htm)
-      Marshal.load(Marshal.dump(確定鍵))
     when Hash
       case
       when 確定鍵[:番号]
-        if (0..4).include?(確定鍵[:番号])
-        else
-          raise '確定鍵の番号は[0..4]で指定してください'
-        end
         [確定鍵]
       else
         if @母音順
@@ -222,6 +198,10 @@ class Generator
         end
         結果
       end
+    when Array
+      # Making Deep Copies in Ruby
+      # - http://ruby.about.com/od/advancedruby/a/deepcopy.htm)
+      Marshal.load(Marshal.dump(確定鍵))
     when nil
       鍵盤確定鍵
     end
