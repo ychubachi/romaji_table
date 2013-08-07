@@ -1,0 +1,72 @@
+\documentclass[submit]{ipsj}
+%\documentclass[submit,draft]{ipsj}
+
+
+\usepackage[dvips]{graphicx}
+\usepackage{latexsym}
+
+\def\Underline{\setbox0\hbox\bgroup\let\\\endUnderline}
+\def\endUnderline{\vphantom{y}\egroup\smash{\underline{\box0}}\\}
+\def\|{\verb|}
+
+\setcounter{巻数}{53}
+\setcounter{号数}{10}
+\setcounter{page}{1}
+
+\受付{2011}{11}{4}
+%\再受付{2011}{7}{16}   %省略可能
+%\再再受付{2011}{7}{20} %省略可能
+\採録{2011}{12}{1}
+
+\begin{document}
+
+
+\title{ローマ字変換規則DSL(仮)}
+
+\etitle{How to Prepare Your Paper for IPSJ Journal \\
+(version 2012/10/12)}
+
+\affiliate{IPSJ}{情報処理学会\\
+IPSJ, Chiyoda, Tokyo 101--0062, Japan}
+
+
+\paffiliate{JU}{情報処理大学\\
+Johoshori Uniersity}
+
+\author{情報 太郎}{Joho Taro}{IPSJ}[joho.taro@ipsj.or.jp]
+\author{処理 花子}{Shori Hanako}{IPSJ}
+\author{学会 次郎}{Gakkai Jiro}{IPSJ,JU}[gakkai.jiro@ipsj.or.jp]
+
+\begin{abstract}
+ローマ字かな変換規則を生成するためのDSL(Domain Specific Language)を開発し
+た．本論文では，変換方式の優劣を論ずるのではなく，DSLの有用性について述べる．
+\end{abstract}
+
+\begin{jkeyword}
+日本語入力, ローマ字変換,
+\end{jkeyword}
+
+\begin{eabstract}
+This document is a guide to prepare a draft for submitting to IPSJ
+Journal, and the final camera-ready manuscript of a paper to appear in
+IPSJ Journal, using {\LaTeX} and special style files.  Since this
+document itself is produced with the style files, it will help you to
+refer its source file which is distributed with the style files.
+\end{eabstract}
+
+\begin{ekeyword}
+IPSJ Journal, \LaTeX, style files, ``Dos and Dont's'' list
+\end{ekeyword}
+
+\maketitle
+
+%1
+\section{はじめに}
+キーボードからの日本語入力にはローマ字かな変換方式を利用するのが一般的である．
+
+\subsection{漢字変換}
+eeeeeeeeeeeeeeeeee
+
+\section{おわりに}
+
+\end{document}

@@ -1,3 +1,4 @@
+<<<<<<< variant A
 *.gem
 *.rbc
 .bundle
@@ -15,3 +16,12 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
+>>>>>>> variant B
+/vendor/bundle
+/.yardoc/
+/doc/
+/coverage/
+xmptmp-*
+/latex/auto/jsample.el
+####### Ancestor
+======= end
