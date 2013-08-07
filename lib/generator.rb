@@ -238,6 +238,7 @@ class Generator
       [{左右: 左右, 段: 段, 番号: 番号}]
     end
   end
+
   def self.execute(contents)
     g = Generator.new
     g.instance_eval(contents, 'JLOD.rb', 9)
