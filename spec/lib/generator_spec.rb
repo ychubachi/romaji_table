@@ -84,7 +84,7 @@ describe Generator do
     end
 
     it '中間鍵を用い，拗音を作成する' do
-      r = s.変換(:ぁ行, 中間鍵: {左右: :右, 段: :上, 番号: 4}, 確定鍵: {左右: :左, 段: :中})
+      r = s.変換(:ぁ行, 開始鍵: {左右: :右, 段: :上, 番号: 4}, 確定鍵: {左右: :左, 段: :中})
       expect(r).to eq [["la", "ぁ"], ["li", "ぃ"], ["lu", "ぅ"], ["le", "ぇ"], ["lo", "ぉ"]]
       r = s.変換(:きゃ行, 開始鍵: {左右: :右, 段: :上, 番号: 2}, 中間鍵: {左右: :右, 番号: 1})
       expect(r).to eq([["cga", "きゃ"], ["cgi", "きぃ"], ["cgu", "きゅ"], ["cge", "きぇ"], ["cgo", "きょ"]])
@@ -263,38 +263,27 @@ describe Generator do
     end
   end
 
-  describe '#省略R' do
-    it '鍵の位置を省略して指定します' do
-      expect(s.send(:省略R, 位置: {左右: :左, 段: :中, 番号: 0})).to eq 'a'
-      expect(s.send(:省略R, 位置: {左右: :左, 番号: 0}, 段: :中)).to eq 'a'
-      expect(s.send(:省略R, 位置: {})).to eq ''
-      expect{
-        s.send(:省略R, 位置: {左右: :左, 番号: 0})
-      }.to raise_error '位置の段が省略されているため段を指定してください'
-    end
-  end
-
   describe '#かな配列化' do
     it '「かな」に配列を渡すと，そのまま返す' do
-      r = s.send(:かな配列化, ['あ', 'いん'])
+      r = s.send(:かな正規化, ['あ', 'いん'])
       expect(r).to be_a Array
       expect(r).to eq ["あ", "いん"]
     end
 
     it '「かな」に文字列を渡すと，1文字毎の配列を返す' do
-      r = s.send(:かな配列化, 'かき')
+      r = s.send(:かな正規化, 'かき')
       expect(r).to be_a Array
       expect(r).to eq ["か", "き"]
     end
 
     it '「かな」にシンボルを渡すと，五十音表の行を返す' do
-      r = s.send(:かな配列化, :さ行)
+      r = s.send(:かな正規化, :さ行)
       expect(r).to be_a Array
       expect(r).to eq ["さ", "し", "す", "せ", "そ"]
     end
 
     it '「かな」にシンボルを渡すと，五十音表の行に無ければ例外発生' do
-      expect{s.send(:かな配列化, :ん行)}.to raise_error '「ん行」は行として登録されていません'
+      expect{s.send(:かな正規化, :ん行)}.to raise_error '「ん行」は行として登録されていません'
     end
   end
 
@@ -305,6 +294,7 @@ describe Generator do
     subject(:s) {Generator.new}
 
     it '省略のない確定鍵を渡すと，そのまま返す' do
+      pending
       r = s.send(:確定鍵正規化, 左右: :左, 段: :中, 番号: 0)
       expect(r).to be_a Array
       expect(r.length).to eq 1
@@ -312,6 +302,7 @@ describe Generator do
     end
 
     it '番号を省略した確定鍵の位置を渡すと，位置配列を返す' do
+      pending
       r = s.send(:確定鍵正規化, 左右: :左, 段: :中)
       expect(r).to be_a Array
       expect(r.length).to eq 5
@@ -324,6 +315,7 @@ describe Generator do
     end
 
     it '確定鍵の番号が範囲外ならば，例外発生' do
+      pending
       expect{s.send(:確定鍵正規化, 左右: :左, 段: :中, 番号: -1)}.
         to raise_error '番号は[0..4]で指定してください'
       expect{s.send(:確定鍵正規化, 左右: :左, 段: :中, 番号: 5)}.
@@ -331,6 +323,7 @@ describe Generator do
     end
 
     it '母音順を設定しておくと，それに従った位置配列を返す' do
+      pending
       # todo: 母音順 -> 鍵盤母音順
       s.母音順 = [4, 2, 0, 1, 3]
       r = s.send(:確定鍵正規化, 左右: :左, 段: :中)
@@ -345,6 +338,7 @@ describe Generator do
     end
 
     it '母音順が未定義ならば，例外発生' do
+      pending
       s.母音順 = nil
       expect{s.send(:確定鍵正規化, 左右: :左, 段: :中)}.
         to raise_error '番号を省略する場合は母音順を設定してください'

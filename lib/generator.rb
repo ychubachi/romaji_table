@@ -97,6 +97,13 @@ class Generator
   # @param [Array] 確定鍵 確定する鍵の位置の配列
   # @return [Array] 変換表
   def 単文字登録(文字, 確定鍵)
+    if 文字.is_a?(String) == false
+      raise '文字は文字列で指定してください'
+    end
+    if 確定鍵.is_a?(Array) == false
+      raise '確定鍵は配列で指定してください'
+    end
+
     ローマ字 = ''
     確定鍵.each do |位置|
       ローマ字 += @鍵盤[位置[:左右]][位置[:段]][位置[:番号]]
@@ -117,8 +124,7 @@ class Generator
   # @return [Array] ローマ字変換列
   # @todo 中間鍵を配列でも渡せるようにする
   def 変換(かな, 追加: '', 開始鍵: nil, 中間鍵: nil, 確定鍵: nil)
-    かな配列 = かな配列化(かな)
-
+    # 引数検査
     case
     when 開始鍵 && 開始鍵.is_a?(Hash) == false
       raise '開始鍵は連想配列で指定，または，省略してください'
@@ -126,6 +132,7 @@ class Generator
       raise '中間鍵は連想配列で指定，または，省略してください'
     end
 
+    かな配列 = かな正規化(かな)
     確定鍵配列 =
       case 確定鍵
       when Array
@@ -133,7 +140,24 @@ class Generator
         # - http://ruby.about.com/od/advancedruby/a/deepcopy.htm)
         Marshal.load(Marshal.dump(確定鍵))
       when Hash
-        確定鍵正規化(確定鍵)
+        case
+        when 確定鍵[:番号]
+          if (0..4).include?(確定鍵[:番号])
+          else
+            raise '確定鍵の番号は[0..4]で指定してください'
+          end
+          [確定鍵]
+        else
+          if @母音順
+          else
+            raise '確定鍵の番号を省略する場合は母音順を設定してください'
+          end
+          結果 = []
+          for 番号 in 0..4
+            結果 << {左右: 確定鍵[:左右], 段: 確定鍵[:段], 番号: @母音順[番号]}
+          end
+          結果
+        end
       when nil
         鍵盤確定鍵
       else
@@ -144,25 +168,26 @@ class Generator
       raise 'かなは確定鍵と同じ文字数で指定してください'
     end
 
-    ## 確定鍵の段が省略されている場合，子音の段を設定する
-    n = 確定鍵配列.length - 1
-    for i in 0..n
-      if 確定鍵配列[i][:段] == nil
-        確定鍵配列[i] = 確定鍵配列[i] # 上でDeep Copyしないと呼び元の変数を壊す
-        確定鍵配列[i][:段] = 開始鍵[:段]
-      end
+    # 中間鍵の段を省略する場合
+    if 中間鍵 && 中間鍵[:段] == nil
+      中間鍵 = 中間鍵.dup
+      中間鍵[:段] = 開始鍵[:段]
     end
 
-    開始鍵R = 開始鍵 ? @鍵盤[開始鍵[:左右]][開始鍵[:段]][開始鍵[:番号]] : ''
-
+    開始鍵R, 中間鍵R = '', ''
     if 開始鍵
-      中間鍵R = 中間鍵 ? 省略R(位置: 中間鍵, 段: 開始鍵[:段]) : ''
-    else
-      中間鍵R = 中間鍵 ? 省略R(位置: 中間鍵) : ''
+      開始鍵R = @鍵盤[開始鍵[:左右]][開始鍵[:段]][開始鍵[:番号]]
+    end
+    if 中間鍵
+      中間鍵R = @鍵盤[中間鍵[:左右]][中間鍵[:段]][中間鍵[:番号]]
     end
 
     結果 = []
     [かな配列, 確定鍵配列].transpose.each do | (かなI, 確定鍵I) |
+      # 確定鍵の段を省略する場合
+      if 確定鍵I[:段] == nil
+        確定鍵I[:段] = 開始鍵[:段]
+      end
       確定鍵R = @鍵盤[確定鍵I[:左右]][確定鍵I[:段]][確定鍵I[:番号]]
       結果 << 変換表作成("#{開始鍵R}#{中間鍵R}#{確定鍵R}", "#{かなI}#{追加}")
     end
@@ -176,24 +201,6 @@ class Generator
     [ローマ字, かな]
   end
 
-  # 省略して位置を指定された場合です
-  #
-  # @param 位置 [Hash]
-  # @param
-  def 省略R(位置: nil, 段: nil)
-    case
-    when 位置 == {} # 変化鍵の省略（母音の位置で判断）
-      ''
-    when !位置[:段] # 位置の省略
-      if 段 == nil
-        raise '位置の段が省略されているため段を指定してください'
-      end
-      @鍵盤[位置[:左右]][段][位置[:番号]]
-    else
-      @鍵盤[位置[:左右]][位置[:段]][位置[:番号]]
-    end
-  end
-
   # 指定に基づき，「かな」の配列を得る操作
   #
   # @param かな [Array, String, Symbol]
@@ -201,7 +208,7 @@ class Generator
   #        配列の場合は，そのまま返す．
   #        文字列の場合は，1文字ごとの配列にする．
   # @return [Array] かなの配列
-  def かな配列化(かな)
+  def かな正規化(かな)
     case かな
     when Array
       かな
@@ -219,25 +226,6 @@ class Generator
   # 番号を省略する場合は，必ず{#母音順}を設定しておくこと．
   #
   # @return [Array] 母音の配列
-  def 確定鍵正規化(左右: nil, 段: nil, 番号: nil)
-    case
-    when !番号
-      if !@母音順
-        raise '番号を省略する場合は母音順を設定してください'
-      end
-      結果 = []
-      for 番号 in 0..4
-        結果 << {左右: 左右, 段: 段, 番号: @母音順[番号]}
-      end
-      結果
-    else
-      if (0..4).include?(番号)
-      else
-        raise '番号は[0..4]で指定してください'
-      end
-      [{左右: 左右, 段: 段, 番号: 番号}]
-    end
-  end
 
   def self.execute(contents)
     g = Generator.new
