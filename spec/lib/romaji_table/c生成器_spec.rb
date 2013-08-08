@@ -20,7 +20,7 @@ end
 =end
 
 describe RomajiTable::C生成器 do
-  subject(:s){RomajiTable::C生成器.new}
+  subject(:s){RomajiTable::C生成器.instance}
 
   describe '#initialize' do
     it '生成されたか？' do
@@ -196,10 +196,7 @@ describe RomajiTable::C生成器 do
 
   describe '#鍵盤登録' do
     it '鍵盤を登録して鍵盤母音を検査します' do
-      s.鍵盤登録({
-                   左: { 上: 'qwert', 中: 'asdfg', 下: 'zxcvb'},
-                   右: { 上: 'yuiop', 中: 'hjkl;', 下: 'bnm,.'}
-                 })
+      s.鍵盤登録(RomajiTable::C生成器::Qwerty)
       expect(s.鍵盤確定鍵.length).to eq 5
       expect(s.鍵盤確定鍵).
         to eq [{左右: :左, 段: :中, 番号: 0},
@@ -207,6 +204,7 @@ describe RomajiTable::C生成器 do
                {左右: :右, 段: :上, 番号: 1},
                {左右: :左, 段: :上, 番号: 2},
                {左右: :右, 段: :上, 番号: 3}]
+      s.鍵盤登録(RomajiTable::C生成器::Dvorak)
     end
   end
 
@@ -218,6 +216,7 @@ describe RomajiTable::C生成器 do
 
   describe '#二重母音' do
     it '行を二重母音にする' do
+      s.二重母音登録 nil
       expect{s.二重母音(s.五十音.表[:あ行])}.to raise_error '二重母音が登録されてません'
       s.二重母音登録 ['あん', 'うい', 'うう', 'えい', 'おう']
       expect(s.二重母音(s.五十音.表[:あ行])).to eq ['あん', 'うい', 'うう', 'えい', 'おう']
@@ -273,6 +272,7 @@ describe RomajiTable::C生成器 do
 
   describe '#execute' do
     it 'DSL' do
+      s.変換表初期化
       # 標準出力をキャプチャするため，デバッグ用のputsなどに注意
       expect(capture(:stdout) {
                RomajiTable::C生成器.execute <<-EOS
@@ -328,6 +328,7 @@ describe RomajiTable::C生成器 do
     end
 
     it '番号を省略した確定鍵の位置を渡すと，位置配列を返す' do
+      s.母音順 = [0, 4, 3, 2, 1]
       r = s.send(:確定鍵正規化, 左右: :左, 段: :中)
       expect(r).to be_a Array
       expect(r.length).to eq 5
@@ -351,12 +352,14 @@ describe RomajiTable::C生成器 do
                {左右: :左, 段: :中, 番号: 0},
                {左右: :左, 段: :中, 番号: 1},
                {左右: :左, 段: :中, 番号: 3}]
+      s.母音順 = [0, 4, 3, 2, 1]
     end
 
     it '母音順が未定義ならば，例外発生' do
       s.母音順 = nil
       expect{s.send(:確定鍵正規化, 左右: :左, 段: :中)}.
         to raise_error '確定鍵の番号を省略する場合は母音順を設定してください'
+      s.母音順 = [0, 4, 3, 2, 1]
     end
   end
 

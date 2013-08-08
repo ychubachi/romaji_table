@@ -4,9 +4,13 @@
 require_relative 'c鍵盤'
 require_relative 'c五十音'
 
+require 'singleton'
+
 module RomajiTable
   # ローマ字変換表生成器
   class C生成器
+    include Singleton
+
     attr :母音順, true
     attr :鍵盤母音
     attr :変換表
@@ -18,14 +22,18 @@ module RomajiTable
     C省略 = nil
 
     def initialize
-      @変換表 = []
       @鍵盤 = C鍵盤.new
       @五十音 = C五十音.new
       @二重母音 = nil
+      @変換表 = []
 
       # 01234    04321
       # aiueo -> aoeui
-      self.母音順 = [0, 4, 3, 2, 1]
+      @母音順 = [0, 4, 3, 2, 1]
+    end
+
+    def 変換表初期化
+      @変換表 = []
     end
 
     # DSL
@@ -224,7 +232,7 @@ module RomajiTable
     end
 
     def self.execute(contents)
-      g = C生成器.new
+      g = C生成器.instance
       g.instance_eval(contents, 'JLOD.rb', 9)
       g.変換表.each do |(k, v)|
         puts "#{k}\t#{v}"
