@@ -7,7 +7,7 @@ require_relative 'c五十音'
 =begin
 ローマ字変換表生成器
 =end
-class Generator
+class C生成器
   attr :母音順, true
   attr :鍵盤母音
   attr :変換表
@@ -124,6 +124,7 @@ class Generator
     if 行配列.is_a?(Array) == false
       raise '行は配列で指定してください'
     end
+    元母音 = @二重母音
     self.二重母音登録(母音)
     結果 = []
     行配列.each do |行|
@@ -131,7 +132,7 @@ class Generator
       yield 行 if block
       結果 << 行
     end
-    self.二重母音登録(nil)
+    self.二重母音登録(元母音)
     結果
   end
 
@@ -224,7 +225,7 @@ class Generator
   end
 
   def self.execute(contents)
-    g = Generator.new
+    g = C生成器.new
     g.instance_eval(contents, 'JLOD.rb', 9)
     g.変換表.each do |(k, v)|
       puts "#{k}\t#{v}"

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-require 'c鍵盤'
+require 'romaji_table/c鍵盤'
 
 describe C鍵盤, '#new' do
   it 'C鍵盤のインスタンスを生成する' do # returns an instance of C鍵盤

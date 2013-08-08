@@ -6,8 +6,8 @@
 # Mac:
 #   file:///Users/yc/git/romaji_table/coverage/index.html
 
+require 'romaji_table/c生成器'
 require 'ice_nine'
-require 'generator'
 
 =begin
 it '追加文字を与えると，対応表を返す' do
@@ -19,8 +19,8 @@ it '追加文字を与えると，対応表を返す' do
 end
 =end
 
-describe Generator do
-  subject(:s){Generator.new}
+describe C生成器 do
+  subject(:s){C生成器.new}
 
   describe '#initialize' do
     it '生成されたか？' do
@@ -275,7 +275,7 @@ describe Generator do
     it 'DSL' do
       # 標準出力をキャプチャするため，デバッグ用のputsなどに注意
       expect(capture(:stdout) {
-               Generator.execute <<-EOS
+               C生成器.execute <<-EOS
                    変換 五十音.表[:あ行], 確定鍵: {左右: :左, 段: :中}
                  EOS
              }).to eq "a\tあ\ni\tい\nu\tう\ne\tえ\no\tお\n"

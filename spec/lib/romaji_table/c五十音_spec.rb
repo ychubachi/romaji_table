@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-require 'c五十音'
+require 'romaji_table/c五十音'
 
 describe C五十音 do
   subject(:it) {C五十音.new}
