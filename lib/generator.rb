@@ -111,7 +111,8 @@ class Generator
   # @return [Array] ローマ字変換列
   # @todo 中間鍵を配列でも渡せるようにする
   def 変換(文字, 追加文字: '', 開始鍵: nil, 中間鍵: nil, 確定鍵: nil)
-    IceNine.deep_freeze([文字, 追加文字, 開始鍵, 中間鍵, 確定鍵])
+    # # Uncomment a floowing line when you need.
+    # IceNine.deep_freeze([文字, 追加文字, 開始鍵, 中間鍵, 確定鍵])
 
     case
     when 開始鍵 && 開始鍵.is_a?(Hash) == false
