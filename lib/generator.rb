@@ -34,11 +34,6 @@ class Generator
     @鍵盤.登録 鍵盤
   end
 
-  # DSL
-  def 鍵盤確定鍵
-    @鍵盤.母音
-  end
-
   # 五十音から直音（あ，ざ，ぱなど）を返す．
   # DSLで変更可能にするため，dupをしている．
   def 直音行
@@ -47,33 +42,6 @@ class Generator
 
   def 拗音(行, 列, 拗音行)
     @五十音.拗音(行, 列, 拗音行)
-  end
-
-  #DSL
-  def 二重母音登録(二重母音)
-    @二重母音 = 二重母音
-  end
-
-  #DSL
-  def 二重母音(行)
-    if @二重母音 == nil
-      raise '二重母音が登録されてません'
-    end
-
-    case 行
-    when Symbol
-      行 = @五十音.表[行]
-    end
-
-    結果 = []
-    @二重母音.each do |二重母音|
-      列 = @五十音.表[:あ行].index(二重母音[0])
-      if 列 == C省略
-        raise "「#{二重母音[0]}」はあ行の文字ではありません"
-      end
-      結果 << "#{行[列]}#{二重母音[1]}"
-    end
-    結果
   end
 
   # 文字（または記号）を登録する
@@ -150,6 +118,48 @@ class Generator
                          "#{文字I}#{追加文字}")
     end
     結果
+  end
+
+  def 母音指定(行配列, 母音, &block)
+    if 行配列.is_a?(Array) == false
+      raise '行は配列で指定してください'
+    end
+    self.二重母音登録(母音)
+    行配列.each do |行|
+      行 = 二重母音(行)
+      yield 行
+    end
+    self.二重母音登録(nil)
+  end
+
+  def 二重母音登録(二重母音)
+    @二重母音 = 二重母音
+  end
+
+  def 二重母音(行)
+    if @二重母音 == nil
+      raise '二重母音が登録されてません'
+    end
+
+    case 行
+    when Symbol
+      行 = @五十音.表[行]
+    end
+
+    結果 = []
+    @二重母音.each do |二重母音|
+      列 = @五十音.表[:あ行].index(二重母音[0])
+      if 列 == C省略
+        raise "「#{二重母音[0]}」はあ行の文字ではありません"
+      end
+      結果 << "#{行[列]}#{二重母音[1]}"
+    end
+    結果
+  end
+
+  # @todo 削除候補
+  def 鍵盤確定鍵
+    @鍵盤.母音
   end
 
   private
