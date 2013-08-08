@@ -125,11 +125,14 @@ class Generator
       raise '行は配列で指定してください'
     end
     self.二重母音登録(母音)
+    結果 = []
     行配列.each do |行|
       行 = 二重母音(行)
-      yield 行
+      yield 行 if block
+      結果 << 行
     end
     self.二重母音登録(nil)
+    結果
   end
 
   def 二重母音登録(二重母音)

@@ -7,7 +7,6 @@
 #   file:///Users/yc/git/romaji_table/coverage/index.html
 
 require 'ice_nine'
-
 require 'generator'
 
 =begin
@@ -362,6 +361,11 @@ describe Generator do
   end
 
   describe '#母音指定' do
+    it '行と母音を指定すると，母音で指定されたその行の文字を返す' do
+      r = s.母音指定([:あ行, :や行], ['あ', 'う', 'お'])
+      expect(r).to eq [["あ", "う", "お"], ['や', 'ゆ', 'よ']]
+    end
+
     it '行と母音を指定すると，母音で指定されたその行の文字をblockが受け取る' do
       expect {
         |b| s.母音指定([:や行], ['あ', 'う', 'お'], &b)
@@ -374,13 +378,7 @@ describe Generator do
       }.to yield_with_args(['やい', 'ゆん', 'よく'])
     end
 
-    it '行を複数指定すると，文字を受け取るBlockを実行する' do
-      expect {
-        |b| s.母音指定([:や行, :か行], ['あ', 'う', 'お'], &b)
-      }.to yield_successive_args(['や', 'ゆ', 'よ'], ['か', 'く', 'こ'])
-    end
-
-    it '行を複数指定すると，文字を受け取るBlockを実行する' do
+    it '行を複数指定すると，文字を受け取るBlockを繰り返し実行する' do
       expect {
         |b| s.母音指定([:や行, :か行], ['あ', 'う', 'お'], &b)
       }.to yield_successive_args(['や', 'ゆ', 'よ'], ['か', 'く', 'こ'])
