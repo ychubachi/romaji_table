@@ -2,14 +2,14 @@
 
 require 'romaji_table/c鍵盤'
 
-describe C鍵盤, '#new' do
-  it 'C鍵盤のインスタンスを生成する' do # returns an instance of C鍵盤
-    expect(C鍵盤.new).to be_an_instance_of C鍵盤
-  end
-end
+describe RomajiTable::C鍵盤 do
+  subject(:it){RomajiTable::C鍵盤.new}
 
-describe C鍵盤 do
-  subject(:it){C鍵盤.new}
+  context '#initialize' do
+    it 'C鍵盤のインスタンスを生成する' do
+      expect(RomajiTable::C鍵盤.new).to be_an_instance_of RomajiTable::C鍵盤
+    end
+  end
 
   context '#[]' do
     it '左右の中身を返す' do
@@ -25,7 +25,7 @@ describe C鍵盤 do
     end
 
     it 'Qwertyを登録したら，鍵盤はその内容を返す' do
-      it.登録(C鍵盤::Qwerty)
+      it.登録(RomajiTable::C鍵盤::Qwerty)
       expect(it.鍵盤).to be_a_kind_of Hash
       expect(it[:左][:上]).to eq "qwert"
     end

@@ -2,12 +2,12 @@
 
 require 'romaji_table/c五十音'
 
-describe C五十音 do
-  subject(:it) {C五十音.new}
+describe RomajiTable::C五十音 do
+  subject(:it) {RomajiTable::C五十音.new}
 
   describe '#initialize' do
     it '五十音を生成する' do
-      expect(C五十音.new).to be_an_instance_of C五十音
+      expect(RomajiTable::C五十音.new).to be_an_instance_of RomajiTable::C五十音
     end
   end
 
