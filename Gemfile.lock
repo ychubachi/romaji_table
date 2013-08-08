@@ -26,6 +26,7 @@ GEM
     guard-yard (2.1.0)
       guard (>= 1.1.0)
       yard (>= 0.7.0)
+    ice_nine (0.8.0)
     listen (1.2.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -71,6 +72,7 @@ DEPENDENCIES
   guard-bundler
   guard-rspec
   guard-yard
+  ice_nine
   pry
   rake
   redcarpet

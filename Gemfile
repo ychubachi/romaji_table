@@ -15,4 +15,5 @@ group :development do
   gem 'yard-rspec'
   gem 'redcarpet'
   gem 'github-markup'
+  gem 'ice_nine'
 end
