@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
-require 'ice_nine'
-
 require_relative 'c鍵盤'
 require_relative 'c五十音'
 

@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 
 # Coverage
-# file:///home/yc/git/romantable_generator/coverage/index.html
-# file:///Users/yc/git/romantable_generator/coverage/index.html
+# Linux:
+#   file:///home/yc/git/romaji_table/coverage/index.html
+# Mac:
+#   file:///Users/yc/git/romaji_table/coverage/index.html
+
+require 'ice_nine'
 
 require 'generator'
 
@@ -40,7 +44,7 @@ describe Generator do
         s.単文字登録(nil, [{左右: :左, 段: :上, 番号: 0}])
       }.to raise_error('文字は文字列で指定してください')
     end
-    it '文字が文字列でなければ，例外発生' do
+    it '確定鍵が配列でなければ，例外発生' do
       expect{
         s.単文字登録('あ', nil)
       }.to raise_error('確定鍵は配列で指定してください')
@@ -53,11 +57,17 @@ describe Generator do
       r = s.変換('あいうえお', 確定鍵: [{左右: :右, 段: :中, 番号: 0}, {左右: :右, 段: :中, 番号: 1},
                                         {左右: :右, 段: :中, 番号: 2}, {左右: :右, 段: :中, 番号: 3},
                                         {左右: :右, 段: :中, 番号: 4}])
-      # 確定鍵の番号を省略する場合
       expect(r).to eq([["d", "あ"], ["h", "い"], ["t", "う"], ["n", "え"], ["s", "お"]])
-      r = s.変換('あいうえお', 確定鍵: {左右: :左, 段: :中})
-      # 確定鍵の全体を省略し，鍵盤の母音鍵を使用する場合
+    end
+
+    it '確定鍵の番号を指定すると，標準を返す' do
+      確定鍵 = {左右: :左, 段: :中}.freeze
+      r = s.変換('あいうえお', 確定鍵: 確定鍵)
       expect(r).to eq([["a", "あ"], ["i", "い"], ["u", "う"], ["e", "え"], ["o", "お"]])
+    end
+
+    it '確定鍵の全体を省略すると，標準の鍵盤母音を用いる' do
+      # 確定鍵の全体を省略し，鍵盤の母音鍵を使用する場合
       r = s.変換('あいうえお')
       expect(r).to eq([["a", "あ"], ["i", "い"], ["u", "う"], ["e", "え"], ["o", "お"]])
     end
@@ -95,11 +105,17 @@ describe Generator do
         should eq([["fa", "ぱ"], ["fi", "ぴ"], ["fu", "ぷ"], ["fe", "ぺ"], ["fo", "ぽ"]])
     end
 
-    it '中間鍵を用い，拗音を作成する' do
+
+    it '拗音を登録する' do
       r = s.変換(:ぁ行, 開始鍵: {左右: :右, 段: :上, 番号: 4}, 確定鍵: {左右: :左, 段: :中})
       expect(r).to eq [["la", "ぁ"], ["li", "ぃ"], ["lu", "ぅ"], ["le", "ぇ"], ["lo", "ぉ"]]
-      r = s.変換(:きゃ行, 開始鍵: {左右: :右, 段: :上, 番号: 2}, 中間鍵: {左右: :右, 番号: 1})
-      expect(r).to eq([["cga", "きゃ"], ["cgi", "きぃ"], ["cgu", "きゅ"], ["cge", "きぇ"], ["cgo", "きょ"]])
+    end
+
+    it '段を週略した中間鍵を用い，拗音を登録する' do
+      中間鍵 = IceNine.deep_freeze({左右: :右, 番号: 1})
+      r = s.変換(:きゃ行, 開始鍵: {左右: :右, 段: :上, 番号: 2}, 中間鍵: 中間鍵)
+      expect(r).to eq([["cga", "きゃ"], ["cgi", "きぃ"], ["cgu", "きゅ"],
+                       ["cge", "きぇ"], ["cgo", "きょ"]])
     end
 
     it '文字に追加する文字を渡すことで，撥音や促音などを生成できる' do
@@ -121,12 +137,25 @@ describe Generator do
                        ["cgj", "きぇん"], ["cgq", "きょん"]])
     end
 
-    it '二重母音を与えて対応表を作成する' do
+    it '二重母音を与えて，対応表を作成する' do
       r = s.変換(['あい', 'うい', 'うう', 'えい', 'おう'], 確定鍵: {左右: :左, 段: :上})
       expect(r).to eq([["'", "あい"], ["y", "うい"], ["p", "うう"], [".", "えい"], [",", "おう"]])
       r = s.変換(['かい', 'くい', 'くう', 'けい', 'こう'],
                  開始鍵: {左右: :右, 段: :上, 番号: 2}, 確定鍵: {左右: :左, 段: :上})
       expect(r).to eq([["c'", "かい"], ["cy", "くい"], ["cp", "くう"], ["c.", "けい"], ["c,", "こう"]])
+    end
+
+
+    it '二重母音を与え，母音の段を省略して，対応表を作成録する' do
+      s.二重母音登録 ['うう', 'おう']
+      母音A = {左右: :右, 番号: 2}.freeze
+      母音B = {左右: :右, 番号: 4}.freeze
+      r = s.変換(s.二重母音(:にゃ行),
+                 開始鍵: {左右: :右, 段: :中, 番号: 3}, 確定鍵: [母音A, 母音B])
+      expect(r).to eq [["nt", "にゅう"], ["ns", "にょう"]]
+      r = s.変換(s.二重母音(:みゃ行),
+                 開始鍵: {左右: :右, 段: :下, 番号: 1}, 確定鍵: [母音A, 母音B])
+      expect(r). to eq [["mw", "みゅう"], ["mz", "みょう"]]
     end
 
     it '制限事項' do
@@ -154,22 +183,7 @@ describe Generator do
     end
   end
 
-  describe '#母音' do
-
-    it '母音の段を省略する' do
-      s.二重母音登録 ['うう', 'おう']
-      母音A = {左右: :右, 番号: 2}
-      母音B = {左右: :右, 番号: 4}
-      r = s.変換(s.二重母音(:にゃ行), 開始鍵: {左右: :右, 段: :中, 番号: 3}, 確定鍵: [母音A, 母音B])
-      expect(r).to eq [["nt", "にゅう"], ["ns", "にょう"]]
-      r = s.変換(s.二重母音(:みゃ行), 開始鍵: {左右: :右, 段: :下, 番号: 1}, 確定鍵: [母音A, 母音B])
-      expect(r). to eq [["mw", "みゅう"], ["mz", "みょう"]]
-    end
-  end
-
   describe '#鍵盤確定鍵' do
-    subject(:s){Generator.new}
-
     it '鍵盤確定鍵を検査します' do
       expect(s.鍵盤確定鍵.length).to eq 5
       expect(s.鍵盤確定鍵).
@@ -182,8 +196,6 @@ describe Generator do
   end
 
   describe '#鍵盤登録' do
-    subject(:s){Generator.new}
-
     it '鍵盤を登録して鍵盤母音を検査します' do
       s.鍵盤登録({
                    左: { 上: 'qwert', 中: 'asdfg', 下: 'zxcvb'},
@@ -309,8 +321,6 @@ describe Generator do
   # private methods
   # ================================================================
   describe '#確定鍵正規化' do
-    subject(:s) {Generator.new}
-
     it '省略のない確定鍵を渡すと，そのまま返す' do
       r = s.send(:確定鍵正規化, 左右: :左, 段: :中, 番号: 0)
       expect(r).to be_a Array
