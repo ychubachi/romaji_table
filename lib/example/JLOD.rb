@@ -2,10 +2,6 @@
 
 require_relative '../romaji_table'
 
-# RomajiTable::C生成器.execute <<-EOS
-#   #{DATA.read}
-# EOS
-# __END__
 ## ================================================================
 ## 高速タイピング JLOD配列 (Japanese Layout on Dvorak)
 ## - http://www.mikage.to/jlod/
