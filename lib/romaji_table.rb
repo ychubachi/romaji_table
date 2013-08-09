@@ -14,7 +14,8 @@ module RomajiTable
         RUBY
       end
     end
-    delegate :母音順
+    delegate(:母音順, :鍵盤登録, :二重母音, :二重母音登録, :直音行, :変換, :単文字登録,
+             :母音指定, :拗音, :変換表)
   end
 end
 

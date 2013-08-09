@@ -196,7 +196,7 @@ describe RomajiTable::C生成器 do
 
   describe '#鍵盤登録' do
     it '鍵盤を登録して鍵盤母音を検査します' do
-      s.鍵盤登録(RomajiTable::C生成器::Qwerty)
+      s.鍵盤登録(RomajiTable::Qwerty)
       expect(s.鍵盤確定鍵.length).to eq 5
       expect(s.鍵盤確定鍵).
         to eq [{左右: :左, 段: :中, 番号: 0},
@@ -204,7 +204,7 @@ describe RomajiTable::C生成器 do
                {左右: :右, 段: :上, 番号: 1},
                {左右: :左, 段: :上, 番号: 2},
                {左右: :右, 段: :上, 番号: 3}]
-      s.鍵盤登録(RomajiTable::C生成器::Dvorak)
+      s.鍵盤登録(RomajiTable::Dvorak)
     end
   end
 

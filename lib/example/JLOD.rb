@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-require_relative '../romaji_table/c生成器'
+require_relative '../romaji_table'
 
-RomajiTable::C生成器.execute <<-EOS
-  #{DATA.read}
-EOS
-__END__
+# RomajiTable::C生成器.execute <<-EOS
+#   #{DATA.read}
+# EOS
+# __END__
 ## ================================================================
 ## 高速タイピング JLOD配列 (Japanese Layout on Dvorak)
 ## - http://www.mikage.to/jlod/
@@ -420,3 +420,5 @@ I.★：頻出語句の省略打ち
 # TODO: [:ゔゃ行, :や行] -> ゆぁ行？？ 追加できるようにする？？
 # TODO: tta -> たっ
 # TODO: ltu
+
+p 変換表

@@ -7,6 +7,9 @@ require_relative 'c五十音'
 require 'singleton'
 
 module RomajiTable
+  Qwerty = C鍵盤::Qwerty
+  Dvorak = C鍵盤::Dvorak
+
   # ローマ字変換表生成器
   class C生成器
     include Singleton
@@ -15,9 +18,6 @@ module RomajiTable
     attr :鍵盤母音
     attr :変換表
     attr :五十音
-
-    Qwerty = C鍵盤::Qwerty
-    Dvorak = C鍵盤::Dvorak
 
     C省略 = nil
 
