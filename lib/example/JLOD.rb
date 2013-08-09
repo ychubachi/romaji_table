@@ -417,4 +417,4 @@ I.★：頻出語句の省略打ち
 # TODO: tta -> たっ
 # TODO: ltu
 
-p 変換表
+puts 変換表
