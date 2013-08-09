@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = RomajiTable::VERSION
   spec.authors       = ["Yoshihide Chubachi"]
   spec.email         = ["yoshi@chubachi.net"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Romaji Table Generator}
+  spec.summary       = %q{A DSL for defining rules to generate a romaji transfer mapping table which can be used by Japanese FEP like Google IME.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
