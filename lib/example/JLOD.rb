@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-require './generator'
+require_relative '../romaji_table/c生成器'
 
-Generator.execute <<-EOS
+RomajiTable::C生成器.execute <<-EOS
   #{DATA.read}
 EOS
 __END__
