@@ -11,7 +11,6 @@ module RomajiTable
             ::RomajiTable::C生成器.
               instance.send(#{method_name.inspect}, *args, &b)
           end
-          # private #{method_name.inspect}
         RUBY
       end
     end
