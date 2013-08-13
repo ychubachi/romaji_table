@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-require 'example/訓令式'
+# require 'example/訓令式'
