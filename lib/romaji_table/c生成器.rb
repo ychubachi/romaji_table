@@ -174,6 +174,12 @@ module RomajiTable
       @鍵盤.母音
     end
 
+    def 変換表出力
+      @変換表.sort.each do |ローマ字, かな|
+        puts "#{ローマ字}\t#{かな}"
+      end
+    end
+
     private
 
     def 変換表作成(ローマ字, かな)
