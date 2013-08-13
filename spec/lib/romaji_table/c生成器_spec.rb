@@ -406,18 +406,3 @@ describe RomajiTable::C生成器 do
     end
   end
 end
-
-# ================================================================
-# 標準出力の検査用
-# ================================================================
-def capture(stream)
-  begin
-    stream = stream.to_s
-    eval "$#{stream} = StringIO.new"
-    yield
-    result = eval("$#{stream}").string
-  ensure
-    eval "$#{stream} = #{stream.upcase}"
-  end
-  result
-end
