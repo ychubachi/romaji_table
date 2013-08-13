@@ -26,5 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'yard'
   spec.add_development_dependency 'yard-rspec'
   spec.add_development_dependency 'ice_nine'
+  spec.add_development_dependency 'aruba'
 
 end
