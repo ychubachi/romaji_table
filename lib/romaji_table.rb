@@ -3,6 +3,18 @@ require_relative "romaji_table/version"
 require_relative "romaji_table/c生成器"
 
 module RomajiTable
+  class Main
+    def initialize(argv, stdin=STDIN, stdout=STDOUT, stderr=STDERR, kernel=Kernel)
+      @argv, @stdin, @stdout, @stderr, @kernel = argv, stdin, stdout, stderr, kernel
+    end
+
+    def execute!
+      p 'I am RomajiTable'
+      # your code here, assign a value to exitstatus
+      @kernel.exit(0)
+    end
+  end
+
   module Delegator
     def self.delegate(*methods)
       methods.each do |method_name|
@@ -14,6 +26,7 @@ module RomajiTable
         RUBY
       end
     end
+
     delegate(:母音順, :鍵盤登録, :二重母音, :二重母音登録, :直音行, :変換,
              :単文字登録, :母音指定, :拗音, :変換表)
   end
