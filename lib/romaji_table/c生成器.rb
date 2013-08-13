@@ -135,9 +135,9 @@ module RomajiTable
       self.二重母音登録(母音)
       結果 = []
       行配列.each do |行|
-        行 = 二重母音(行)
-        yield 行 if block
-        結果 << 行
+        文字 = 二重母音(行)
+        yield 文字, 行 if block
+        結果 << [文字, 行]
       end
       self.二重母音登録(元母音)
       結果

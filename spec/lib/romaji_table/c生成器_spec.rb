@@ -366,25 +366,25 @@ describe RomajiTable::C生成器 do
   describe '#母音指定' do
     it '行と母音を指定すると，母音で指定されたその行の文字を返す' do
       r = s.母音指定([:あ行, :や行], ['あ', 'う', 'お'])
-      expect(r).to eq [["あ", "う", "お"], ['や', 'ゆ', 'よ']]
+      expect(r).to eq [[["あ", "う", "お"], :あ行], [['や', 'ゆ', 'よ'], :や行]]
     end
 
     it '行と母音を指定すると，母音で指定されたその行の文字をblockが受け取る' do
       expect {
         |b| s.母音指定([:や行], ['あ', 'う', 'お'], &b)
-      }.to yield_with_args(['や', 'ゆ', 'よ'])
+      }.to yield_with_args(['や', 'ゆ', 'よ'], :や行)
     end
 
     it '二重母音を指定すると，二重母音で指定されたその行の文字をblockが受け取る' do
       expect {
         |b| s.母音指定([:や行], ['あい', 'うん', 'おく'], &b)
-      }.to yield_with_args(['やい', 'ゆん', 'よく'])
+      }.to yield_with_args(['やい', 'ゆん', 'よく'], :や行)
     end
 
     it '行を複数指定すると，文字を受け取るBlockを繰り返し実行する' do
       expect {
         |b| s.母音指定([:や行, :か行], ['あ', 'う', 'お'], &b)
-      }.to yield_successive_args(['や', 'ゆ', 'よ'], ['か', 'く', 'こ'])
+      }.to yield_successive_args([["や", "ゆ", "よ"], :や行], [["か", "く", "こ"], :か行])
     end
   end
 end
