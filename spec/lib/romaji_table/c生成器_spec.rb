@@ -178,7 +178,7 @@ describe RomajiTable::C生成器 do
       }.to raise_error '開始鍵は連想配列で指定，または，省略してください'
       expect{
         s.変換(:か行, 中間鍵: :ようおん)
-      }.to raise_error '中間鍵は連想配列で指定，または，省略してください'
+      }.to raise_error '中間鍵は連想配列または配列で指定，または，省略してください'
     end
   end
 

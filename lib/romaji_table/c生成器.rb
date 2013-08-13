@@ -90,29 +90,30 @@ module RomajiTable
       case
       when 開始鍵 && 開始鍵.is_a?(Hash) == false
         raise '開始鍵は連想配列で指定，または，省略してください'
-      when 中間鍵 && 中間鍵.is_a?(Hash) == false
-        raise '中間鍵は連想配列で指定，または，省略してください'
-      when 確定鍵 && (確定鍵.is_a?(Hash) == false && 確定鍵.is_a?(Array) == false)
-        raise '確定鍵は連想配列または配列で指定，または，省略してください'
       end
 
       文字配列   = 文字正規化(文字)
+      中間鍵配列 = 中間鍵正規化(中間鍵)
       確定鍵配列 = 確定鍵正規化(確定鍵)
+
       if 文字配列.length != 確定鍵配列.length
         raise '文字は確定鍵と同じ文字数で指定してください'
       end
 
-      if 中間鍵 && 中間鍵[:段] == C省略
-        中間鍵 = 中間鍵.dup
-        中間鍵[:段] = 開始鍵[:段]
+      中間鍵配列.each do |中間鍵i|
+        if 中間鍵i[:段] == C省略
+          中間鍵i[:段] = 開始鍵[:段]
+        end
       end
 
       開始鍵R, 中間鍵R = '', ''
       if 開始鍵
         開始鍵R = @鍵盤[開始鍵[:左右]][開始鍵[:段]][開始鍵[:番号]]
       end
-      if 中間鍵
-        中間鍵R = @鍵盤[中間鍵[:左右]][中間鍵[:段]][中間鍵[:番号]]
+      if 中間鍵配列
+        中間鍵配列.each do |中間鍵i|
+          中間鍵R += @鍵盤[中間鍵i[:左右]][中間鍵i[:段]][中間鍵i[:番号]]
+        end
       end
 
       結果 = []
@@ -200,6 +201,19 @@ module RomajiTable
       end
     end
 
+    def 中間鍵正規化(中間鍵)
+      case 中間鍵
+      when Array
+        Marshal.load(Marshal.dump(中間鍵))
+      when Hash
+        [中間鍵.dup]
+      when nil
+        []
+      else
+        raise '中間鍵は連想配列または配列で指定，または，省略してください'
+      end
+    end
+
     # TODO: 母音位置にて番号が省略されている場合，登録されている母音順に従い位置の配列に正規化する
     #
     # 番号を省略する場合は，必ず{#母音順}を設定しておくこと．
@@ -223,11 +237,11 @@ module RomajiTable
           結果
         end
       when Array
-        # Making Deep Copies in Ruby
-        # - http://ruby.about.com/od/advancedruby/a/deepcopy.htm)
         Marshal.load(Marshal.dump(確定鍵))
       when nil
         鍵盤確定鍵
+      else
+        raise '確定鍵は連想配列または配列で指定，または，省略してください'
       end
     end
 
