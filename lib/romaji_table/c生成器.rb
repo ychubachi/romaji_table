@@ -14,41 +14,40 @@ module RomajiTable
   class C生成器
     include Singleton
 
-    attr :母音順, true
-    attr :鍵盤母音
-    attr :変換表
+    # 鍵盤にある母音の順番を左からの番号で指定
+    attr :鍵盤母音順, true
+
+    # 生成された変換表の配列
+    attr :変換表, true
+
+    # {RomajiTable::C五十音}の実体への参照
     attr :五十音
 
+    # nilへのエイリアス
     C省略 = nil
 
     def initialize
       @鍵盤 = C鍵盤.new
       @五十音 = C五十音.new
-      @二重母音 = nil
+
       @変換表 = []
+      @二重母音 = nil
 
       # 01234    04321
       # aiueo -> aoeui
-      @母音順 = [0, 4, 3, 2, 1]
+      @鍵盤母音順 = [0, 4, 3, 2, 1]
     end
 
-    def 変換表初期化
-      @変換表 = []
-    end
-
-    # DSL
     def 鍵盤登録(鍵盤)
       @鍵盤.登録 鍵盤
     end
 
-    # 五十音から直音（あ，ざ，ぱなど）を返す．
-    # DSLで変更可能にするため，dupをしている．
     def 直音行
       @五十音.直音行.dup
     end
 
-    def 拗音(行, 列, 拗音行)
-      @五十音.拗音(行, 列, 拗音行)
+    def 拗音行(行, 列, 拗音)
+      @五十音.拗音(行, 列, 拗音)
     end
 
     # 文字（または記号）を登録する
@@ -128,19 +127,24 @@ module RomajiTable
       結果
     end
 
-    def 母音指定(行配列, 母音, &block)
+    def 母音指定(行配列, 母音, 拗音化: nil, &block)
       if 行配列.is_a?(Array) == false
         raise '行は配列で指定してください'
       end
-      元母音 = @二重母音
-      self.二重母音登録(母音)
+      元母音, @二重母音 = @二重母音, 母音
       結果 = []
       行配列.each do |行|
-        文字 = 二重母音(行)
+        行x =
+          if 拗音化
+            拗音行(行, 拗音化[0], 拗音化[1])
+          else
+            行
+          end
+        文字 = 二重母音(行x)
         yield 文字, 行 if block
         結果 << [文字, 行]
       end
-      self.二重母音登録(元母音)
+      @二重母音 = 元母音
       結果
     end
 
@@ -175,7 +179,7 @@ module RomajiTable
     end
 
     def 変換表出力
-      @変換表.sort.each do |ローマ字, かな|
+      @変換表.each do |ローマ字, かな|
         puts "#{ローマ字}\t#{かな}"
       end
     end
@@ -220,42 +224,30 @@ module RomajiTable
       end
     end
 
-    # TODO: 母音位置にて番号が省略されている場合，登録されている母音順に従い位置の配列に正規化する
-    #
-    # 番号を省略する場合は，必ず{#母音順}を設定しておくこと．
-    #
-    # @return [Array] 母音の配列
+
     def 確定鍵正規化(確定鍵)
       case 確定鍵
+      when Array
+        Marshal.load(Marshal.dump(確定鍵))
       when Hash
         case
         when 確定鍵[:番号]
           [確定鍵]
         else
-          if @母音順
+          if @鍵盤母音順
           else
-            raise '確定鍵の番号を省略する場合は母音順を設定してください'
+            raise '確定鍵の番号を省略する場合は鍵盤母音順を設定してください'
           end
           結果 = []
           for 番号 in 0..4
-            結果 << {左右: 確定鍵[:左右], 段: 確定鍵[:段], 番号: @母音順[番号]}
+            結果 << {左右: 確定鍵[:左右], 段: 確定鍵[:段], 番号: @鍵盤母音順[番号]}
           end
           結果
         end
-      when Array
-        Marshal.load(Marshal.dump(確定鍵))
       when nil
         鍵盤確定鍵
       else
         raise '確定鍵は連想配列または配列で指定，または，省略してください'
-      end
-    end
-
-    def self.execute(contents)
-      g = C生成器.instance
-      g.instance_eval(contents, 'JLOD.rb', 9)
-      g.変換表.each do |(k, v)|
-        puts "#{k}\t#{v}"
       end
     end
   end

@@ -23,8 +23,10 @@ describe RomajiTable::C生成器 do
   subject(:s){RomajiTable::C生成器.instance}
 
   describe '#initialize' do
-    it '生成されたか？' do
-      expect(s).not_to be nil
+    it '実体を生成する' do
+      生成器 = RomajiTable::C生成器.instance
+      expect(生成器).not_to be nil
+      expect(生成器).to be_a RomajiTable::C生成器
     end
   end
 
@@ -269,36 +271,25 @@ describe RomajiTable::C生成器 do
     end
   end
 
-  describe '#拗音' do
+  describe '#拗音行' do
     it '行と列，拗音行(:ゃ)を与えると，拗音を返す' do
-      expect(s.拗音(:か行, :い列, :ゃ行)).to eq :きゃ行
+      expect(s.拗音行(:か行, :い列, :ゃ行)).to eq :きゃ行
     end
 
     it '行と列，拗音行(:ぁ)を与えると，拗音を返す' do
-      expect(s.拗音(:は行, :う列, :ぁ行)).to eq :ふぁ行
+      expect(s.拗音行(:は行, :う列, :ぁ行)).to eq :ふぁ行
     end
 
     it '対象としない行と列を与えると，例外発生' do
-      expect{s.拗音(:ん行, :な列, :ゃ行)}.
+      expect{s.拗音行(:ん行, :な列, :ゃ行)}.
         to raise_error '「ん行」は行として登録されていません'
-      expect{s.拗音(:か行, :な列, :ゃ行)}.
+      expect{s.拗音行(:か行, :な列, :ゃ行)}.
         to raise_error '「な列」はあ行の文字ではありません'
-      expect{s.拗音(:か行, :い, :ん)}.
+      expect{s.拗音行(:か行, :い, :ん)}.
         to raise_error '拗音行には「ゃ行」または「ぁ行」を指定してください'
     end
   end
 
-  describe '#execute' do
-    it 'DSL' do
-      s.変換表初期化
-      # 標準出力をキャプチャするため，デバッグ用のputsなどに注意
-      expect(capture(:stdout) {
-               RomajiTable::C生成器.execute <<-EOS
-                   変換 五十音.表[:あ行], 確定鍵: {左右: :左, 段: :中}
-                 EOS
-             }).to eq "a\tあ\ni\tい\nu\tう\ne\tえ\no\tお\n"
-    end
-  end
 
   ## ================================================================
   ## Private methods
@@ -334,9 +325,6 @@ describe RomajiTable::C生成器 do
     end
   end
 
-  # ================================================================
-  # private methods
-  # ================================================================
   describe '#確定鍵正規化' do
     it '省略のない確定鍵を渡すと，そのまま返す' do
       r = s.send(:確定鍵正規化, 左右: :左, 段: :中, 番号: 0)
@@ -346,7 +334,7 @@ describe RomajiTable::C生成器 do
     end
 
     it '番号を省略した確定鍵の位置を渡すと，位置配列を返す' do
-      s.母音順 = [0, 4, 3, 2, 1]
+      s.鍵盤母音順 = [0, 4, 3, 2, 1]
       r = s.send(:確定鍵正規化, 左右: :左, 段: :中)
       expect(r).to be_a Array
       expect(r.length).to eq 5
@@ -358,9 +346,8 @@ describe RomajiTable::C生成器 do
                {左右: :左, 段: :中, 番号: 1}]
     end
 
-    it '母音順を設定しておくと，それに従った位置配列を返す' do
-      # todo: 母音順 -> 鍵盤母音順
-      s.母音順 = [4, 2, 0, 1, 3]
+    it '{#鍵盤母音順}を設定しておくと，それに従った位置配列を返す' do
+      s.鍵盤母音順 = [4, 2, 0, 1, 3]
       r = s.send(:確定鍵正規化, 左右: :左, 段: :中)
       expect(r).to be_a Array
       expect(r.length).to eq 5
@@ -370,14 +357,14 @@ describe RomajiTable::C生成器 do
                {左右: :左, 段: :中, 番号: 0},
                {左右: :左, 段: :中, 番号: 1},
                {左右: :左, 段: :中, 番号: 3}]
-      s.母音順 = [0, 4, 3, 2, 1]
+      s.鍵盤母音順 = [0, 4, 3, 2, 1]
     end
 
-    it '母音順が未定義ならば，例外発生' do
-      s.母音順 = nil
+    it '{#鍵盤母音順}が未定義ならば，例外発生' do
+      s.鍵盤母音順 = nil
       expect{s.send(:確定鍵正規化, 左右: :左, 段: :中)}.
-        to raise_error '確定鍵の番号を省略する場合は母音順を設定してください'
-      s.母音順 = [0, 4, 3, 2, 1]
+        to raise_error '確定鍵の番号を省略する場合は鍵盤母音順を設定してください'
+      s.鍵盤母音順 = [0, 4, 3, 2, 1]
     end
   end
 
@@ -403,6 +390,20 @@ describe RomajiTable::C生成器 do
       expect {
         |b| s.母音指定([:や行, :か行], ['あ', 'う', 'お'], &b)
       }.to yield_successive_args([["や", "ゆ", "よ"], :や行], [["か", "く", "こ"], :か行])
+    end
+
+    it '拗音化引数を与えると，行を拗音にすることができる' do
+      expect {
+        |b| s.母音指定([:か行, :さ行], ['あ', 'う', 'お'], 拗音化: [:い列, :ゃ行], &b)
+      }.to yield_successive_args([['きゃ', 'きゅ', 'きょ'], :か行], [['しゃ', 'しゅ', 'しょ'], :さ行])
+    end
+  end
+
+  describe '#変換表出力' do
+    it '生成した変換表を出力する' do
+      s.変換表 = []
+      s.変換('あいうえお')
+      expect(capture(:stdout){s.変換表出力}).to eq("a\tあ\ni\tい\nu\tう\ne\tえ\no\tお\n")
     end
   end
 end
