@@ -184,23 +184,12 @@ describe RomajiTable::C生成器 do
     end
   end
 
-  describe '#鍵盤確定鍵' do
-    it '鍵盤確定鍵を検査します' do
-      expect(s.鍵盤確定鍵.length).to eq 5
-      expect(s.鍵盤確定鍵).
-        to eq [{左右: :左, 段: :中, 番号: 0},
-               {左右: :左, 段: :中, 番号: 4},
-               {左右: :左, 段: :中, 番号: 3},
-               {左右: :左, 段: :中, 番号: 2},
-               {左右: :左, 段: :中, 番号: 1}]
-    end
-  end
 
   describe '#鍵盤登録' do
     it '鍵盤を登録して鍵盤母音を検査します' do
       s.鍵盤登録(RomajiTable::Qwerty)
-      expect(s.鍵盤確定鍵.length).to eq 5
-      expect(s.鍵盤確定鍵).
+      expect(s.鍵盤.母音.length).to eq 5
+      expect(s.鍵盤.母音).
         to eq [{左右: :左, 段: :中, 番号: 0},
                {左右: :右, 段: :上, 番号: 2},
                {左右: :右, 段: :上, 番号: 1},

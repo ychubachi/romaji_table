@@ -23,6 +23,9 @@ module RomajiTable
     # {RomajiTable::C五十音}の実体への参照
     attr :五十音
 
+    # {RomajiTable::C鍵盤}の実体への参照
+    attr :鍵盤
+
     # nilへのエイリアス
     C省略 = nil
 
@@ -173,11 +176,6 @@ module RomajiTable
       結果
     end
 
-    # @todo 削除候補
-    def 鍵盤確定鍵
-      @鍵盤.母音
-    end
-
     def 変換表出力
       @変換表.each do |ローマ字, かな|
         puts "#{ローマ字}\t#{かな}"
@@ -245,7 +243,7 @@ module RomajiTable
           結果
         end
       when nil
-        鍵盤確定鍵
+        @鍵盤.母音
       else
         raise '確定鍵は連想配列または配列で指定，または，省略してください'
       end
