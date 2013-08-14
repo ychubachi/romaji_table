@@ -3,6 +3,7 @@
 
 require_relative 'c鍵盤'
 require_relative 'c五十音'
+require_relative 'c変換表'
 
 require 'singleton'
 
@@ -30,8 +31,9 @@ module RomajiTable
     C省略 = nil
 
     def initialize
-      @鍵盤 = C鍵盤.new
       @五十音 = C五十音.new
+      @鍵盤   = C鍵盤.new
+      @変換表 = C変換表.new(@鍵盤)
 
       @変換表配列 = []
       @二重母音 = nil
@@ -85,47 +87,31 @@ module RomajiTable
     #   いずれの場合も，必ず「かな」と同じ長さになるようにすること．
     # @return [Array] ローマ字変換列
     # @todo 中間鍵を配列でも渡せるようにする
-    def 変換(文字, 追加文字: '', 開始鍵: nil, 中間鍵: nil, 確定鍵: nil)
+    def 変換(文字, 追加文字: '', 開始鍵: nil, 中間鍵: nil, 確定鍵: nil, 次開始鍵: nil)
       # # Uncomment a floowing line when you need.
       # IceNine.deep_freeze([文字, 追加文字, 開始鍵, 中間鍵, 確定鍵])
-
-      case
-      when 開始鍵 && 開始鍵.is_a?(Hash) == false
-        raise '開始鍵は連想配列で指定，または，省略してください'
-      end
-
       文字配列   = 文字正規化(文字)
       中間鍵配列 = 中間鍵正規化(中間鍵)
       確定鍵配列 = 確定鍵正規化(確定鍵)
+
+      if 開始鍵 && 開始鍵.is_a?(Hash) == false
+        raise '開始鍵は連想配列で指定，または，省略してください'
+      end
 
       if 文字配列.length != 確定鍵配列.length
         raise '文字は確定鍵と同じ文字数で指定してください'
       end
 
-      中間鍵配列.each do |中間鍵i|
-        if 中間鍵i[:段] == C省略
-          中間鍵i[:段] = 開始鍵[:段]
-        end
-      end
+      中間鍵配列 = 段省略(中間鍵配列, 開始鍵)
+      確定鍵配列 = 段省略(確定鍵配列, 開始鍵)
 
-      開始鍵R, 中間鍵R = '', ''
-      if 開始鍵
-        開始鍵R = @鍵盤[開始鍵[:左右]][開始鍵[:段]][開始鍵[:番号]]
-      end
-      if 中間鍵配列
-        中間鍵配列.each do |中間鍵i|
-          中間鍵R += @鍵盤[中間鍵i[:左右]][中間鍵i[:段]][中間鍵i[:番号]]
-        end
-      end
+      打鍵順 = []
+      開始鍵     and 打鍵順 += [開始鍵]
+      中間鍵配列 and 打鍵順 += 中間鍵配列
 
       結果 = []
-      [文字配列, 確定鍵配列].transpose.each do | (文字I, 確定鍵I) |
-        if 確定鍵I[:段] == C省略
-          確定鍵I[:段] = 開始鍵[:段]
-        end
-        確定鍵R = @鍵盤[確定鍵I[:左右]][確定鍵I[:段]][確定鍵I[:番号]]
-        結果 << 変換表作成("#{開始鍵R}#{中間鍵R}#{確定鍵R}",
-                           "#{文字I}#{追加文字}")
+      [文字配列, 確定鍵配列].transpose.each do | (文字i, 確定鍵i) |
+        結果 << @変換表.追加(文字i + 追加文字, 打鍵順 + [確定鍵i], 次開始鍵: 次開始鍵)
       end
       結果
     end
@@ -177,9 +163,14 @@ module RomajiTable
     end
 
     def 変換表出力
-      @変換表配列.each do |ローマ字, かな|
-        puts "#{ローマ字}\t#{かな}"
-      end
+      @変換表.出力
+      # @変換表配列.each do |ローマ字, かな|
+      #   puts "#{ローマ字}\t#{かな}"
+      # end
+    end
+
+    def 変換表消去
+      @変換表.消去
     end
 
     private
@@ -246,6 +237,14 @@ module RomajiTable
         @鍵盤.母音
       else
         raise '確定鍵は連想配列または配列で指定，または，省略してください'
+      end
+    end
+
+    def 段省略(鍵配列, 参照鍵)
+      鍵配列.each do |鍵i|
+        if 鍵i[:段] == C省略
+          鍵i[:段] = 参照鍵[:段]
+        end
       end
     end
   end

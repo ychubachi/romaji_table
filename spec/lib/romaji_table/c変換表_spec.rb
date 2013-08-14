@@ -17,7 +17,7 @@ describe RomajiTable::C変換表 do
 
   describe '#追加' do
     it '文字と打鍵順を与えて変換表に追加する' do
-      s.追加('あ', [{左右: :左, 段: :中, 番号: 0}])
+      expect(s.追加('あ', [{左右: :左, 段: :中, 番号: 0}])).to eq "a\tあ"
       expect(s.表).to eq [["あ", [{:左右=>:左, :段=>:中, :番号=>0}]]]
     end
 
@@ -42,14 +42,22 @@ describe RomajiTable::C変換表 do
     end
   end
 
+
+  describe '#消去' do
+    it 'ローマ字かな変換表を消去する' do
+      s.消去
+      expect(s.表.length).to eq 0
+    end
+  end
+
   describe '#ローマ字' do
     it '打鍵順を与えると，鍵盤の情報を元にローマ字の列を生成する' do
-      expect(s.ローマ字([{左右: :左, 段: :中, 番号: 0}])).to eq 'a'
-      expect(s.ローマ字([{左右: :左, 段: :中, 番号: 0}, {左右: :右, 段: :上, 番号: 3}])).to eq 'ar'
+      expect(s.send(:ローマ字, [{左右: :左, 段: :中, 番号: 0}])).to eq 'a'
+      expect(s.send(:ローマ字, [{左右: :左, 段: :中, 番号: 0}, {左右: :右, 段: :上, 番号: 3}])).to eq 'ar'
     end
 
     it '打鍵順が配列でなければ，例外発生' do
-      expect{s.ローマ字({左右: :左, 段: :中, 番号: 0})}.to raise_error '打鍵順は配列で与えてください'
+      expect{s.send(:ローマ字, {左右: :左, 段: :中, 番号: 0})}.to raise_error '打鍵順は配列で与えてください'
     end
   end
 end
