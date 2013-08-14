@@ -309,7 +309,7 @@ describe RomajiTable::C生成器 do
       expect(r).to eq ["さ", "し", "す", "せ", "そ"]
     end
 
-    it '「文字」にシンボルを渡すと，五十音表の行に無ければ例外発生' do
+    it '「文字」にシンボルを渡したとき，五十音表の行に無ければ例外発生' do
       expect{s.send(:文字正規化, :ん行)}.to raise_error '「ん行」は行として登録されていません'
     end
   end
