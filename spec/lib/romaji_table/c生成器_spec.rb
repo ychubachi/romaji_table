@@ -260,21 +260,21 @@ describe RomajiTable::C生成器 do
     end
   end
 
-  describe '#拗音行' do
+  describe '#行拗音化' do
     it '行と列，拗音行(:ゃ)を与えると，拗音を返す' do
-      expect(s.拗音行(:か行, :い列, :ゃ行)).to eq :きゃ行
+      expect(s.行拗音化(:か行, :い列, :ゃ行)).to eq :きゃ行
     end
 
     it '行と列，拗音行(:ぁ)を与えると，拗音を返す' do
-      expect(s.拗音行(:は行, :う列, :ぁ行)).to eq :ふぁ行
+      expect(s.行拗音化(:は行, :う列, :ぁ行)).to eq :ふぁ行
     end
 
     it '対象としない行と列を与えると，例外発生' do
-      expect{s.拗音行(:ん行, :な列, :ゃ行)}.
+      expect{s.行拗音化(:ん行, :な列, :ゃ行)}.
         to raise_error '「ん行」は行として登録されていません'
-      expect{s.拗音行(:か行, :な列, :ゃ行)}.
+      expect{s.行拗音化(:か行, :な列, :ゃ行)}.
         to raise_error '「な列」はあ行の文字ではありません'
-      expect{s.拗音行(:か行, :い, :ん)}.
+      expect{s.行拗音化(:か行, :い, :ん)}.
         to raise_error '拗音行には「ゃ行」または「ぁ行」を指定してください'
     end
   end

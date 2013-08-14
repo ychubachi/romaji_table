@@ -49,7 +49,7 @@ module RomajiTable
       @五十音.直音行.dup
     end
 
-    def 拗音行(行, 列, 拗音)
+    def 行拗音化(行, 列, 拗音)
       @五十音.拗音(行, 列, 拗音)
     end
 
@@ -139,7 +139,7 @@ module RomajiTable
       行配列.each do |行|
         行x =
           if 拗音化
-            拗音行(行, 拗音化[0], 拗音化[1])
+            行拗音化(行, 拗音化[0], 拗音化[1])
           else
             行
           end
