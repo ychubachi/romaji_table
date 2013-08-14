@@ -18,7 +18,7 @@ module RomajiTable
     attr :鍵盤母音順, true
 
     # 生成された変換表の配列
-    attr :変換表, true
+    attr :変換表配列, true
 
     # {RomajiTable::C五十音}の実体への参照
     attr :五十音
@@ -33,7 +33,7 @@ module RomajiTable
       @鍵盤 = C鍵盤.new
       @五十音 = C五十音.new
 
-      @変換表 = []
+      @変換表配列 = []
       @二重母音 = nil
 
       # 01234    04321
@@ -57,7 +57,7 @@ module RomajiTable
     #
     # @param [String] 文字 登録する文字
     # @param [Array] 確定鍵 確定する鍵の位置の配列
-    # @return [Array] 変換表
+    # @return [Array] 変換表配列
     def 単文字登録(文字, 確定鍵)
       if 文字.is_a?(String) == false
         raise '文字は文字列で指定してください'
@@ -177,7 +177,7 @@ module RomajiTable
     end
 
     def 変換表出力
-      @変換表.each do |ローマ字, かな|
+      @変換表配列.each do |ローマ字, かな|
         puts "#{ローマ字}\t#{かな}"
       end
     end
@@ -185,7 +185,7 @@ module RomajiTable
     private
 
     def 変換表作成(ローマ字, かな)
-      @変換表 << [ローマ字, かな]
+      @変換表配列 << [ローマ字, かな]
       [ローマ字, かな]
     end
 

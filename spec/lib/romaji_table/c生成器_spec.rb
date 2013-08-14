@@ -390,7 +390,7 @@ describe RomajiTable::C生成器 do
 
   describe '#変換表出力' do
     it '生成した変換表を出力する' do
-      s.変換表 = []
+      s.変換表配列 = []
       s.変換('あいうえお')
       expect(capture(:stdout){s.変換表出力}).to eq("a\tあ\ni\tい\nu\tう\ne\tえ\no\tお\n")
     end
