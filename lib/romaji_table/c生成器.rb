@@ -116,7 +116,7 @@ module RomajiTable
       結果
     end
 
-    def 母音指定(行配列, 母音, 拗音化: nil, &block)
+    def 文字生成(行配列, 母音, 拗音化: nil, &block)
       if 行配列.is_a?(Array) == false
         raise '行は配列で指定してください'
       end
