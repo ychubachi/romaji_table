@@ -220,7 +220,7 @@ module RomajiTable
         Marshal.load(Marshal.dump(確定鍵))
       when Hash
         case
-        when 確定鍵[:番号]
+        when 確定鍵[:番号] || 確定鍵[:範囲外]
           [確定鍵]
         else
           if @鍵盤母音順
