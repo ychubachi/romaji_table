@@ -246,7 +246,7 @@ module RomajiTable
 
     def 段省略(鍵配列, 参照鍵)
       鍵配列.each do |鍵i|
-        if 鍵i[:段] == C省略
+        if 鍵i[:範囲外] == nil && 鍵i[:段] == C省略
           鍵i[:段] = 参照鍵[:段]
         end
       end
