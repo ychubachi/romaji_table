@@ -47,6 +47,10 @@ module RomajiTable
       @鍵盤.登録 鍵盤
     end
 
+    def 母音順登録(母音順)
+      @鍵盤母音順 = 母音順
+    end
+
     def 直音行
       @五十音.直音行.dup
     end
