@@ -21,18 +21,6 @@ describe RomajiTable::C五十音 do
     end
   end
 
-  describe '#列' do
-    it '列にあ行の文字を与えると，その列を返す' do
-      expect(it.列(:う)).to eq ["う", "く", "す", "つ", "ぬ",
-                                "ふ", "む", "ゆ", "る", "う",
-                                "ぐ", "ず", "づ", "ぶ", "ぷ"]
-    end
-
-    it '列にあ行にない文字を与えると，例外発生' do
-      expect{it.列(:し)}.to raise_error('列にはあ行の文字を指定してください')
-    end
-  end
-
   describe '#直音行' do
     it '直音を返す' do
       expect(it.直音行).to eq [:あ行,
