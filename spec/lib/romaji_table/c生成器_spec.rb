@@ -34,6 +34,11 @@ describe RomajiTable::C生成器 do
       r = s.変換('あいうえお', 確定鍵: 確定鍵)
       expect(r).to eq ["a\tあ", "i\tい", "u\tう", "e\tえ", "o\tお"]
     end
+    it '確定鍵の番号を指定すると，標準を返す（シフト）' do
+      確定鍵 = {左右: :左, 段: :中, シフト: true}.freeze
+      r = s.変換('あいうえお', 確定鍵: 確定鍵)
+      expect(r).to eq ["A\tあ", "I\tい", "U\tう", "E\tえ", "O\tお"]
+    end
 
     it '確定鍵を省略すると，鍵盤にある母音鍵を用いる' do
       r = s.変換('あいうえお')
