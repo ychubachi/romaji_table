@@ -176,6 +176,9 @@ module RomajiTable
     def 変換表消去
       @変換表.消去
     end
+    def 五十音合成(対象行, 列: nil, 行: nil)
+      @五十音.合成(対象行, 列: 列, 行: 行)
+    end
 
     private
 

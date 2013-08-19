@@ -28,10 +28,9 @@ module RomajiTable
     end
 
     delegate(:母音順登録, :鍵盤登録, :二重母音, :二重母音登録, :直音行, :変換,
-             :単文字登録, :行拗音化, :変換表, :変換表出力, :文字生成)
+             :単文字登録, :行拗音化, :変換表, :変換表出力, :文字生成, :五十音合成)
   end
 end
-
 
 # SinatraはDSLなんかじゃない、Ruby偽装を使ったマインドコントロールだ！
 # - hp12c - http://d.hatena.ne.jp/keyesberry/20110603/p1
