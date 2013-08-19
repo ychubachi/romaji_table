@@ -131,6 +131,37 @@ module RomajiTable
       行x[列x]
     end
 
+    def 合成(対象行, 列: nil, 行: nil)
+      unless 対象行.is_a? Array
+        raise '対象行は配列で指定してください'
+      end
+      結果 = []
+      対象行.each do |対象行x|
+        if 列 == nil
+          かなx = @表[対象行x]
+        else
+          かなx = [かな(対象行x, 列)]
+        end
+
+        if 行
+          if 行.is_a? Symbol
+            行 = @表[行]
+          end
+          unless 行.is_a? Array
+            raise '行はシンボルまたは配列で指定してください'
+          end
+          かなy = []
+          行.each do |行の列|
+            かなy << かなx[0] + 行の列
+          end
+          かなx = かなy
+        end
+
+        結果 << [かなx, 対象行x]
+      end
+      結果
+    end
+
     # 行と列，拗音行を与えると，拗音行を返す
     def 拗音(行, 列, 拗音行)
       unless [:ゃ行, :ぁ行].include?(拗音行)
