@@ -285,6 +285,13 @@ describe RomajiTable::C生成器 do
     end
   end
 
+  describe '#シフト' do
+    it '位置をシフトする' do
+      expect(s.シフト({左右: :左, 段: :中, 番号: 0})).
+        to eq({左右: :左, 段: :中, 番号: 0, シフト: true})
+    end
+  end
+
   describe '#文字生成' do
     it '行と母音を指定すると，母音で指定されたその行の文字を返す' do
       r = s.文字生成([:あ行, :や行], ['あ', 'う', 'お'])

@@ -192,6 +192,10 @@ module RomajiTable
       @五十音.合成(対象行, 列: 列, 行: 行)
     end
 
+    def シフト(位置)
+      C鍵盤.シフト(位置)
+    end
+
     private
 
     def 変換表作成(ローマ字, かな)

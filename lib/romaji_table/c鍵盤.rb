@@ -45,5 +45,11 @@ module RomajiTable
     def [] 左右
       @鍵盤[左右]
     end
+
+    def self.シフト(位置)
+      位置 = 位置.dup
+      位置[:シフト] = true
+      位置
+    end
   end
 end

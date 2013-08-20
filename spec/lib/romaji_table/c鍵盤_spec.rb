@@ -38,4 +38,11 @@ describe RomajiTable::C鍵盤 do
                              {:左右=>:左, :段=>:中, :番号=>1}]
     end
   end
+
+  context '#シフト' do
+    it '位置をシフトする' do
+      expect(RomajiTable::C鍵盤.シフト({左右: :左, 段: :中, 番号: 0})).
+        to eq({左右: :左, 段: :中, 番号: 0, シフト: true})
+    end
+  end
 end
