@@ -135,12 +135,13 @@ module RomajiTable
       unless 対象行.is_a? Array
         raise '対象行は配列で指定してください'
       end
+
       結果 = []
       対象行.each do |対象行x|
-        if 列 == nil
-          かなx = @表[対象行x]
-        else
+        if 列
           かなx = [かな(対象行x, 列)]
+        else
+          かなx = @表[対象行x]
         end
 
         if 行
