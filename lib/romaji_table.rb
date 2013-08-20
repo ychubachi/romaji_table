@@ -10,7 +10,6 @@ module RomajiTable
 
     def execute!
       p 'I am RomajiTable'
-      # your code here, assign a value to exitstatus
       @kernel.exit(0)
     end
   end
@@ -27,8 +26,10 @@ module RomajiTable
       end
     end
 
-    delegate(:母音順登録, :鍵盤登録, :二重母音, :二重母音登録, :直音行, :変換,
-             :単文字登録, :行拗音化, :変換表, :変換表出力, :文字生成, :五十音合成)
+    delegate(:母音順登録, :鍵盤登録, :二重母音, :二重母音登録, :変換,
+             :単文字登録, :行拗音化, :変換表, :変換表出力, :文字生成, :五十音合成,
+             :直音行, :拗音行, :開拗音行, :合拗音行
+             )
   end
 end
 

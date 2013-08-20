@@ -55,6 +55,18 @@ module RomajiTable
       @五十音.直音行.dup
     end
 
+    def 拗音行
+      @五十音.拗音行.dup
+    end
+
+    def 開拗音行
+      @五十音.開拗音行.dup
+    end
+
+    def 合拗音行
+      @五十音.合拗音行.dup
+    end
+
     def 行拗音化(行, 列, 拗音)
       @五十音.拗音(行, 列, 拗音)
     end
