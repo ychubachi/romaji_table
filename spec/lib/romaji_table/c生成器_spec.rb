@@ -261,6 +261,13 @@ describe RomajiTable::C生成器 do
     end
   end
 
+  describe '#拗音行' do
+    it '五十音表で拗音になれる行を返す操作である' do
+      expect(s.拗音行).to eq [:か行, :が行, :さ行, :ざ行, :た行, :だ行, :な行,
+                              :は行, :ば行, :ぱ行, :ま行, :ら行, :ゔ行].sort
+    end
+  end
+
   describe '#合拗音行' do
     it '五十音表の合拗音行（「ふぁ」「つぁ」行など）を返す操作である' do
       expect(s.合拗音行).to eq [:くぁ行, :ぐぁ行, :すぁ行, :ずぁ行, :つぁ行, :づぁ行, :ぬぁ行,
@@ -321,6 +328,12 @@ describe RomajiTable::C生成器 do
         |b| s.文字生成([:か行, :さ行], ['あ', 'う', 'お'], 拗音化: [:い列, :ゃ行], &b)
       }.to yield_successive_args([['きゃ', 'きゅ', 'きょ'], :か行], [['しゃ', 'しゅ', 'しょ'], :さ行])
     end
+
+    it '制限事項' do
+      expect {
+        s.文字生成(nil, nil)
+      }.to raise_error '行は配列で指定してください'
+    end
   end
 
   describe '#変換表出力' do
@@ -365,6 +378,16 @@ describe RomajiTable::C生成器 do
     end
   end
 
+
+  describe '#中間鍵正規化' do
+    it '省略のない確定鍵を渡すと，そのまま返す' do
+      r = s.send(:中間鍵正規化, [左右: :左, 段: :中, 番号: 0])
+      expect(r).to be_a Array
+      expect(r.length).to eq 1
+      expect(r).to eq [{左右: :左, 段: :中, 番号: 0}]
+    end
+  end
+
   describe '#確定鍵正規化' do
     it '省略のない確定鍵を渡すと，そのまま返す' do
       r = s.send(:確定鍵正規化, 左右: :左, 段: :中, 番号: 0)
@@ -374,7 +397,7 @@ describe RomajiTable::C生成器 do
     end
 
     it '番号を省略した確定鍵の位置を渡すと，位置配列を返す' do
-      s.鍵盤母音順 = [0, 4, 3, 2, 1]
+      s.鍵盤母音順([0, 4, 3, 2, 1])
       r = s.send(:確定鍵正規化, 左右: :左, 段: :中)
       expect(r).to be_a Array
       expect(r.length).to eq 5
@@ -387,7 +410,7 @@ describe RomajiTable::C生成器 do
     end
 
     it '{#鍵盤母音順}を設定しておくと，それに従った位置配列を返す' do
-      s.鍵盤母音順 = [4, 2, 0, 1, 3]
+      s.鍵盤母音順([4, 2, 0, 1, 3])
       r = s.send(:確定鍵正規化, 左右: :左, 段: :中)
       expect(r).to be_a Array
       expect(r.length).to eq 5
@@ -397,14 +420,21 @@ describe RomajiTable::C生成器 do
                {左右: :左, 段: :中, 番号: 0},
                {左右: :左, 段: :中, 番号: 1},
                {左右: :左, 段: :中, 番号: 3}]
-      s.鍵盤母音順 = [0, 4, 3, 2, 1]
+      s.鍵盤母音順([0, 4, 3, 2, 1])
     end
 
     it '{#鍵盤母音順}が未定義ならば，例外発生' do
-      s.鍵盤母音順 = nil
+      s.鍵盤母音順(nil)
       expect{s.send(:確定鍵正規化, 左右: :左, 段: :中)}.
         to raise_error '確定鍵の番号を省略する場合は鍵盤母音順を設定してください'
-      s.鍵盤母音順 = [0, 4, 3, 2, 1]
+      s.鍵盤母音順([0, 4, 3, 2, 1])
+    end
+  end
+
+  describe '#五十音合成' do
+    it '五十音を合成する' do
+      expect(s.五十音合成([:あ行])).
+        to eq [[["あ", "い", "う", "え", "お"], :あ行]]
     end
   end
 end

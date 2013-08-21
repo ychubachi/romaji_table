@@ -16,7 +16,7 @@ module RomajiTable
     include Singleton
 
     # 鍵盤にある母音の順番を左からの番号で指定
-    attr :鍵盤母音順, true
+    attr :鍵盤母音順
 
     # 生成された変換表の配列
     attr :変換表配列, true
@@ -47,7 +47,7 @@ module RomajiTable
       @鍵盤.登録 鍵盤
     end
 
-    def 母音順登録(母音順)
+    def 鍵盤母音順(母音順)
       @鍵盤母音順 = 母音順
     end
 
