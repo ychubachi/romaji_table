@@ -3,6 +3,9 @@ require_relative 'c鍵盤'
 
 module RomajiTable
   class C変換表
+    class C変換 < Struct.new(:文字, :打鍵順, :次開始鍵)
+    end
+
     attr :表
 
     def initialize(鍵盤)
@@ -10,7 +13,7 @@ module RomajiTable
         raise 'C鍵盤の実体への参照を与えてください'
       end
       @鍵盤 = 鍵盤
-      @表 = []
+      消去
     end
 
     def 追加(文字, 打鍵順, 次開始鍵: nil)
@@ -20,10 +23,12 @@ module RomajiTable
       if 次開始鍵 && 次開始鍵.is_a?(Hash) == false
         raise '次開始鍵は連想配列で与えてください'
       end
-      変換 = [文字, 打鍵順]
-      if 次開始鍵
-        変換 << 次開始鍵
+      if @重複[打鍵順]
+        raise "#{打鍵順}は既に「#{@重複[打鍵順]}」として登録されています"
+      else
+        @重複[打鍵順] = 文字
       end
+      変換 = C変換.new(文字, 打鍵順, 次開始鍵)
       @表 << 変換
       文字列化(変換)
     end
@@ -36,16 +41,17 @@ module RomajiTable
 
     def 消去
       @表 = []
+      @重複 = {}
     end
 
     private
 
     def 文字列化(変換)
       作業用 = []
-      作業用 += [ローマ字(変換[1])]
-      作業用 += [変換[0]]
-      if 変換.length == 3
-        作業用 += [ローマ字([変換[2]])]
+      作業用 += [ローマ字(変換.打鍵順)]
+      作業用 += [変換.文字]
+      if 変換.次開始鍵
+        作業用 += [ローマ字([変換.次開始鍵])]
       end
       作業用.join("\t")
     end

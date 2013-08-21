@@ -18,17 +18,17 @@ describe RomajiTable::C変換表 do
   describe '#追加' do
     it '文字と打鍵順を与えて変換表に追加する' do
       expect(s.追加('あ', [{左右: :左, 段: :中, 番号: 0}])).to eq "a\tあ"
-      expect(s.表).to eq [["あ", [{:左右=>:左, :段=>:中, :番号=>0}]]]
+      expect(s.表.length).to eq 1
     end
 
     it '文字と打鍵順を与えて変換表に追加する（シフト）' do
       expect(s.追加('あ', [{左右: :左, 段: :中, 番号: 0, シフト: true}])).to eq "A\tあ"
-      expect(s.表).to eq [["あ", [{:左右=>:左, :段=>:中, :番号=>0, :シフト=>true}]]]
+      expect(s.表.length).to eq 1
     end
 
     it '文字と打鍵順を与えて変換表に追加する（範囲外）' do
       expect(s.追加("ん", [{範囲外: "\'"}])).to eq "'\tん"
-      expect(s.表).to eq [["ん", [{範囲外: "\'"}]]]
+      expect(s.表.length).to eq 1
     end
 
     it '打鍵順が配列でなければ例外発生' do
@@ -39,6 +39,12 @@ describe RomajiTable::C変換表 do
     it '次開始鍵が連想配列でなければ例外発生' do
       expect{s.追加('あ', [{左右: :左, 段: :中, 番号: 0}], 次開始鍵: [:左, :中, 0])}.
         to raise_error('次開始鍵は連想配列で与えてください')
+    end
+
+    it '重複があれば例外発生' do
+      s.追加('あ', [{左右: :左, 段: :中, 番号: 0}])
+      expect{s.追加('あ', [{左右: :左, 段: :中, 番号: 0}])}.
+        to raise_error '[{:左右=>:左, :段=>:中, :番号=>0}]は既に「あ」として登録されています'
     end
   end
 
@@ -68,6 +74,18 @@ describe RomajiTable::C変換表 do
 
     it '打鍵順が配列でなければ，例外発生' do
       expect{s.send(:ローマ字, {左右: :左, 段: :中, 番号: 0})}.to raise_error '打鍵順は配列で与えてください'
+    end
+  end
+end
+
+describe RomajiTable::C変換表::C変換 do
+  describe '#new' do
+    it '生成する' do
+      r = RomajiTable::C変換表::C変換.
+        new('あ', [{左右: :左, 段: :中, 番号: 0}], {左右: :左, 段: :中, 番号: 0})
+      expect(r.文字).to eq "あ"
+      expect(r.打鍵順).to eq [{左右: :左, 段: :中, 番号: 0}]
+      expect(r.次開始鍵).to eq({左右: :左, 段: :中, 番号: 0})
     end
   end
 end

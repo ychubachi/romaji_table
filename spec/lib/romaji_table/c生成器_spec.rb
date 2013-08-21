@@ -12,6 +12,10 @@ require 'ice_nine'
 describe RomajiTable::C生成器 do
   subject(:s){RomajiTable::C生成器.instance}
 
+  before :each do
+    s.変換表消去
+  end
+
   describe '#initialize' do
     it '実体を生成する' do
       生成器 = RomajiTable::C生成器.instance
