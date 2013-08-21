@@ -3,17 +3,6 @@ require_relative "romaji_table/version"
 require_relative "romaji_table/c生成器"
 
 module RomajiTable
-  class Main
-    def initialize(argv, stdin=STDIN, stdout=STDOUT, stderr=STDERR, kernel=Kernel)
-      @argv, @stdin, @stdout, @stderr, @kernel = argv, stdin, stdout, stderr, kernel
-    end
-
-    def execute!
-      p 'I am RomajiTable'
-      @kernel.exit(0)
-    end
-  end
-
   module Delegator
     def self.delegate(*methods)
       methods.each do |method_name|
