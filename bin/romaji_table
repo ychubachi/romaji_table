@@ -1,2 +1,6 @@
+#! /usr/bin/env ruby
+
+require "bundler/setup"
 require 'romaji_table'
+
 RomajiTable::Main.new(ARGV.dup).execute!
