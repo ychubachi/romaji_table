@@ -2,6 +2,11 @@
 
 TODO: Write a gem description
 
+New product name:
+  Rational Japanese Input
+  Rational Japanese Layout
+  Rational Japanese Syllabary Input Method, or Syllabary Method
+
 ## Installation
 
 Add this line to your application's Gemfile:
